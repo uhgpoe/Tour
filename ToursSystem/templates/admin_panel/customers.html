@@ -1,0 +1,62 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block title %}Customers Directory | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">Registered Travelers & Customers</h3>
+    <div class="text-muted small">Directory of all traveler accounts, total reservations, and customer lifetime value.</div>
+  </div>
+  <span class="badge bg-primary fs-6 rounded-pill px-3 py-2">
+    {{ customers.count }} Total Customer{{ customers.count|pluralize }}
+  </span>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light small text-uppercase">
+        <tr>
+          <th>Customer Name</th>
+          <th>Username</th>
+          <th>Email Address</th>
+          <th>Phone</th>
+          <th>Location</th>
+          <th>Total Bookings</th>
+          <th>Total Spent</th>
+          <th>Joined Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for c in customers %}
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-2">
+                <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 36px; height: 36px;">
+                  {{ c.first_name|default:c.username|make_list|first|upper }}
+                </div>
+                <div class="fw-bold text-dark">
+                  {{ c.first_name }} {{ c.last_name|default:'' }}
+                </div>
+              </div>
+            </td>
+            <td><code class="text-dark">{{ c.username }}</code></td>
+            <td>{{ c.email }}</td>
+            <td class="small">{{ c.profile.phone|default:'-' }}</td>
+            <td class="small">{{ c.profile.city|default:'' }}{% if c.profile.country %}, {{ c.profile.country }}{% endif %}</td>
+            <td>
+              <span class="badge bg-light text-primary border px-2 py-1">{{ c.booking_count }}</span>
+            </td>
+            <td class="fw-bold text-success">${{ c.total_spent|default:'0' }}</td>
+            <td class="small text-muted">{{ c.date_joined|date:"M d, Y" }}</td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="8" class="text-center py-4 text-muted">No registered customers found.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

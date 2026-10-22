@@ -1,0 +1,75 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Manage Destinations"|t }} | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">{{ "Manage Destinations"|t }}</h3>
+    <div class="text-muted small">{% if IS_KHMER %}បន្ថែម កែប្រែ ឬលុបគោលដៅទេសចរណ៍ និងមើលកញ្ចប់ទេសចរណ៍ពាក់ព័ន្ធ។{% else %}Add, update, or remove destinations and view associated packages.{% endif %}</div>
+  </div>
+  <a href="{% url 'admin_destination_add' %}" class="btn btn-primary-custom rounded-pill">
+    <i class="fa-solid fa-plus me-1"></i> {{ "Add New Destination"|t }}
+  </a>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light small text-uppercase">
+        <tr>
+          <th>{{ "Destinations"|t }}</th>
+          <th>{{ "Country"|t }} & {{ "City"|t }}</th>
+          <th>{{ "Tour Packages"|t }}</th>
+          <th>{% if IS_KHMER %}រដូវកាលល្អបំផុត{% else %}Best Season{% endif %}</th>
+          <th>{{ "Climate"|t }}</th>
+          <th>{{ "Featured Destinations"|t }}</th>
+          <th class="text-end">{{ "Actions"|t }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for dest in destinations %}
+          <tr>
+            <td>
+              <div class="d-flex align-items-center gap-3">
+                <img src="{{ dest.display_image }}" alt="{{ dest.name }}" class="rounded-3" style="width: 50px; height: 50px; object-fit: cover;">
+                <div>
+                  <div class="fw-bold text-dark">{{ dest.name }}</div>
+                  <div class="smaller text-muted">Slug: {{ dest.slug }}</div>
+                </div>
+              </div>
+            </td>
+            <td>
+              <div class="fw-semibold">{{ dest.country }}</div>
+              <div class="small text-muted">{{ dest.city }}</div>
+            </td>
+            <td>
+              <span class="badge bg-light text-primary border px-2 py-1">{{ dest.package_count }} {{ "Tour Packages"|t }}</span>
+            </td>
+            <td class="small">{{ dest.best_time_to_visit }}</td>
+            <td class="small text-muted">{{ dest.climate }}</td>
+            <td>
+              {% if dest.is_featured %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">{% if IS_KHMER %}បាទ/ចាស{% else %}Yes{% endif %}</span>
+              {% else %}
+                <span class="badge bg-light text-muted border rounded-pill">{% if IS_KHMER %}ទេ{% else %}No{% endif %}</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a href="{% url 'admin_destination_edit' dest.pk %}" class="btn btn-sm btn-outline-primary me-1" title="{{ "Edit"|t }}">
+                <i class="fa-solid fa-pen-to-square"></i>
+              </a>
+              <a href="{% url 'admin_destination_delete' dest.pk %}" class="btn btn-sm btn-outline-danger" title="{{ "Delete"|t }}" onclick="return confirm('{% if IS_KHMER %}តើអ្នកប្រាកដជាចង់លុបគោលដៅ {{ dest.name }} មែនទេ? កញ្ចប់ទេសចរណ៍ទាំងអស់ដែលពាក់ព័ន្ធក៏នឹងត្រូវបានលុបផងដែរ!{% else %}Are you sure you want to delete destination {{ dest.name }}? All related tour packages will also be removed!{% endif %}');">
+                <i class="fa-solid fa-trash"></i>
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="text-center py-4 text-muted">{% if IS_KHMER %}មិនមានគោលដៅទេសចរណ៍ទេ។ ចុច 'បន្ថែមគោលដៅថ្មី' ដើម្បីបង្កើត។{% else %}No destinations found. Click 'Add New Destination' to create one.{% endif %}</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

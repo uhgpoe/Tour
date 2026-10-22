@@ -1,0 +1,254 @@
+{% load static lang_tags %}
+<!DOCTYPE html>
+<html lang="{{ CURRENT_LANGUAGE|default:'en' }}" class="{% if IS_KHMER %}lang-km{% endif %}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{% block title %}{{ "Discover The World's Most Extraordinary Journeys"|t }} | Wanderlust Journeys{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ "Handcrafted travel packages, unforgettable expeditions, and seamless luxury bookings tailored for you."|t }}{% endblock %}">
+
+  <!-- Bootstrap 5.3 CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6.5 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
+  <!-- Custom Modern Stylesheet -->
+  <link rel="stylesheet" href="{% static 'css/style.css' %}">
+  {% block extra_css %}{% endblock %}
+</head>
+<body class="d-flex flex-column min-vh-100 {% if IS_KHMER %}lang-km{% endif %}">
+
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-custom sticky-top">
+    <div class="container">
+      <a class="navbar-brand d-flex align-items-center gap-2" href="{% url 'home' %}">
+        <i class="fa-solid fa-earth-americas text-primary fs-3"></i>
+        <span>Wander<span class="brand-gradient">lust</span></span>
+      </a>
+
+      <button class="navbar-toggler border-0 shadow-none" type="button" data-bs-toggle="collapse" data-bs-target="#navbarMain" aria-controls="navbarMain" aria-expanded="false" aria-label="Toggle navigation">
+        <i class="fa-solid fa-bars fs-4 text-dark"></i>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarMain">
+        <ul class="navbar-nav mx-auto mb-2 mb-lg-0">
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}" href="{% url 'home' %}">
+              <i class="fa-solid fa-house-chimney me-1 small"></i> {{ "Home"|t }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 'destination' in request.path %}active{% endif %}" href="{% url 'destinations_list' %}">
+              <i class="fa-solid fa-map-location-dot me-1 small"></i> {{ "Destinations"|t }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if 'packages' in request.path %}active{% endif %}" href="{% url 'packages_list' %}">
+              <i class="fa-solid fa-compass me-1 small"></i> {{ "Tour Packages"|t }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'about_us' %}active{% endif %}" href="{% url 'about_us' %}">
+              {{ "About Us"|t }}
+            </a>
+          </li>
+          <li class="nav-item">
+            <a class="nav-link {% if request.resolver_match.url_name == 'contact_us' %}active{% endif %}" href="{% url 'contact_us' %}">
+              {{ "Contact"|t }}
+            </a>
+          </li>
+        </ul>
+
+        <div class="d-flex align-items-center gap-2">
+          <!-- Language Switcher (Khmer & English) -->
+          <div class="dropdown">
+            <button class="lang-switch-btn dropdown-toggle" type="button" id="langDropdown" data-bs-toggle="dropdown" aria-expanded="false" title="{{ "Language"|t }}">
+              <span>{{ CURRENT_LANG_FLAG }}</span>
+              <span class="d-none d-sm-inline">{{ CURRENT_LANG_NAME }}</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end lang-dropdown-menu shadow" aria-labelledby="langDropdown">
+              <li>
+                <a class="lang-dropdown-item {% if IS_ENGLISH %}active{% endif %}" href="{% url 'switch_language' 'en' %}">
+                  <span class="d-flex align-items-center gap-2">
+                    <span class="fs-6">🇬🇧</span>
+                    <span>English</span>
+                  </span>
+                  {% if IS_ENGLISH %}
+                    <i class="fa-solid fa-check text-primary small ms-2"></i>
+                  {% endif %}
+                </a>
+              </li>
+              <li>
+                <a class="lang-dropdown-item {% if IS_KHMER %}active{% endif %}" href="{% url 'switch_language' 'km' %}">
+                  <span class="d-flex align-items-center gap-2">
+                    <span class="fs-6">🇰🇭</span>
+                    <span>ភាសាខ្មែរ (Khmer)</span>
+                  </span>
+                  {% if IS_KHMER %}
+                    <i class="fa-solid fa-check text-primary small ms-2"></i>
+                  {% endif %}
+                </a>
+              </li>
+            </ul>
+          </div>
+
+          {% if user.is_authenticated %}
+            {% if user.is_staff or user.is_superuser %}
+              <a href="{% url 'admin_dashboard' %}" class="btn btn-sm btn-outline-dark rounded-pill px-3 py-1 fw-bold">
+                <i class="fa-solid fa-gauge-high text-warning me-1"></i> {{ "Admin Portal"|t }}
+              </a>
+            {% endif %}
+
+            <div class="dropdown">
+              <button class="btn btn-outline-custom dropdown-toggle d-flex align-items-center gap-2" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                <i class="fa-solid fa-circle-user fs-5"></i>
+                <span class="d-none d-sm-inline">{{ user.first_name|default:user.username }}</span>
+              </button>
+              <ul class="dropdown-menu dropdown-menu-end shadow border-0 mt-2 py-2">
+                <li><h6 class="dropdown-header">{{ "Signed in as"|t }} <strong>{{ user.username }}</strong></h6></li>
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item py-2" href="{% url 'customer_dashboard' %}">
+                    <i class="fa-solid fa-calendar-check text-primary me-2"></i> {{ "My Bookings & Profile"|t }}
+                  </a>
+                </li>
+                {% if user.is_staff %}
+                  <li>
+                    <a class="dropdown-item py-2" href="{% url 'admin_dashboard' %}">
+                      <i class="fa-solid fa-chart-line text-success me-2"></i> {{ "Management Dashboard"|t }}
+                    </a>
+                  </li>
+                  <li>
+                    <a class="dropdown-item py-2" href="/admin/" target="_blank">
+                      <i class="fa-solid fa-shield-halved text-secondary me-2"></i> {{ "Django Native Admin"|t }}
+                    </a>
+                  </li>
+                {% endif %}
+                <li><hr class="dropdown-divider"></li>
+                <li>
+                  <a class="dropdown-item py-2 text-danger" href="{% url 'logout' %}">
+                    <i class="fa-solid fa-arrow-right-from-bracket me-2"></i> {{ "Sign Out"|t }}
+                  </a>
+                </li>
+              </ul>
+            </div>
+          {% else %}
+            <a href="{% url 'login' %}" class="btn btn-link text-dark text-decoration-none fw-semibold">{{ "Sign In"|t }}</a>
+            <a href="{% url 'register' %}" class="btn btn-primary-custom">
+              <i class="fa-solid fa-user-plus me-1"></i> {{ "Join Free"|t }}
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </nav>
+
+  <!-- Flash Messages Banner -->
+  <div class="container mt-3">
+    {% if messages %}
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags|default:'info' }} alert-dismissible fade show shadow-sm d-flex align-items-center justify-content-between" role="alert">
+          <div>
+            {% if message.tags == 'success' %}
+              <i class="fa-solid fa-circle-check fs-5 me-2 text-success"></i>
+            {% elif message.tags == 'danger' or message.tags == 'error' %}
+              <i class="fa-solid fa-circle-exclamation fs-5 me-2 text-danger"></i>
+            {% elif message.tags == 'warning' %}
+              <i class="fa-solid fa-triangle-exclamation fs-5 me-2 text-warning"></i>
+            {% else %}
+              <i class="fa-solid fa-circle-info fs-5 me-2 text-primary"></i>
+            {% endif %}
+            <span>{{ message }}</span>
+          </div>
+          <button type="button" class="btn-close ms-3" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>
+      {% endfor %}
+    {% endif %}
+  </div>
+
+  <!-- Main Body Content -->
+  <main class="flex-grow-1">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  <footer class="footer-custom mt-auto">
+    <div class="container">
+      <div class="row g-4 mb-5">
+        <!-- Brand & Description -->
+        <div class="col-lg-4 col-md-6">
+          <div class="d-flex align-items-center gap-2 mb-3">
+            <i class="fa-solid fa-earth-americas text-white fs-2"></i>
+            <span class="fs-4 fw-bold text-white">Wander<span class="brand-gradient">lust</span></span>
+          </div>
+          <p class="text-secondary small pe-lg-4">
+            Curating bespoke luxury travel journeys, thrilling expeditions, and culturally immersive tours around the globe since 2018. Your unforgettable memory begins here.
+          </p>
+          <div class="d-flex gap-2 mt-4">
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-facebook-f"></i></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-instagram"></i></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-twitter"></i></a>
+            <a href="#" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 38px; height: 38px; display: inline-flex; align-items: center; justify-content: center;"><i class="fa-brands fa-youtube"></i></a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div class="col-lg-2 col-md-3 col-6">
+          <h5>{{ "Quick Links"|t }}</h5>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'home' %}" class="footer-link">{{ "Home"|t }}</a></li>
+            <li><a href="{% url 'destinations_list' %}" class="footer-link">{{ "Destinations"|t }}</a></li>
+            <li><a href="{% url 'packages_list' %}" class="footer-link">{{ "Tour Packages"|t }}</a></li>
+            <li><a href="{% url 'about_us' %}" class="footer-link">{{ "About Us"|t }}</a></li>
+            <li><a href="{% url 'contact_us' %}" class="footer-link">{{ "Contact"|t }}</a></li>
+          </ul>
+        </div>
+
+        <!-- Popular Categories -->
+        <div class="col-lg-2 col-md-3 col-6">
+          <h5>{{ "Categories"|t }}</h5>
+          <ul class="list-unstyled">
+            <li><a href="{% url 'packages_list' %}?category=Beach" class="footer-link">{{ "Beach & Coastal"|t }}</a></li>
+            <li><a href="{% url 'packages_list' %}?category=Mountain" class="footer-link">{{ "Mountain & Hiking"|t }}</a></li>
+            <li><a href="{% url 'packages_list' %}?category=Cultural" class="footer-link">{{ "Cultural & Heritage"|t }}</a></li>
+            <li><a href="{% url 'packages_list' %}?category=Luxury" class="footer-link">{{ "Luxury & Wellness"|t }}</a></li>
+            <li><a href="{% url 'packages_list' %}?category=Wildlife" class="footer-link">{{ "Wildlife & Safari"|t }}</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact & Newsletter -->
+        <div class="col-lg-4 col-md-6">
+          <h5>{{ "Stay Connected"|t }}</h5>
+          <p class="small text-secondary mb-3">{{ "Subscribe to get seasonal private travel deals and secret discounts directly to your inbox."|t }}</p>
+          <div class="input-group mb-3">
+            <input type="email" class="form-control rounded-start-pill border-0" placeholder="{{ "Enter your email"|t }}" aria-label="Email">
+            <button class="btn btn-primary-custom rounded-end-pill px-3" type="button">{{ "Subscribe"|t }}</button>
+          </div>
+          <div class="small text-secondary mt-3">
+            <div><i class="fa-solid fa-headset me-2 text-primary"></i> {{ "24/7 Concierge"|t }}: +1 (800) 456-7890</div>
+            <div><i class="fa-solid fa-envelope me-2 text-primary"></i> support@wanderlustjourneys.com</div>
+          </div>
+        </div>
+      </div>
+
+      <hr class="border-secondary my-4">
+
+      <div class="row align-items-center">
+        <div class="col-md-6 text-center text-md-start small text-secondary">
+          &copy; 2026 Wanderlust Journeys. {{ "All rights reserved."|t }}
+        </div>
+        <div class="col-md-6 text-center text-md-end mt-2 mt-md-0 small text-secondary">
+          <a href="#" class="text-secondary text-decoration-none me-3">{{ "Privacy Policy"|t }}</a>
+          <a href="#" class="text-secondary text-decoration-none me-3">{{ "Terms of Service"|t }}</a>
+          <a href="#" class="text-secondary text-decoration-none">{{ "Security"|t }}</a>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Bootstrap 5.3 Bundle JS -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Custom JS -->
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

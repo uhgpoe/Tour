@@ -1,0 +1,83 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Explore Destinations"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="py-5 bg-dark text-white text-center position-relative" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?auto=format&fit=crop&w=1920&q=80') center/cover;">
+  <div class="container py-4">
+    <h1 class="display-5 fw-bold mb-3">
+      {% if IS_KHMER %}រុករកគោលដៅទេសចរណ៍ទូទាំងពិភពលោក{% else %}Explore Worldwide Destinations{% endif %}
+    </h1>
+    <p class="lead text-white-50 mx-auto" style="max-width: 600px;">
+      {{ "Find your perfect getaway among world-class destinations"|t }}
+    </p>
+
+    <!-- Search Form -->
+    <div class="row justify-content-center mt-4">
+      <div class="col-md-6">
+        <form method="GET" action="{% url 'destinations_list' %}" class="input-group shadow">
+          <input type="text" name="q" value="{{ query }}" class="form-control form-control-lg border-0 rounded-start-pill ps-4" placeholder="{{ "Search destination or country"|t }}...">
+          <button class="btn btn-primary-custom rounded-end-pill px-4" type="submit">
+            <i class="fa-solid fa-magnifying-glass"></i> {{ "Search"|t }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Destinations Grid -->
+<div class="container py-5">
+  {% if query %}
+    <div class="d-flex align-items-center justify-content-between mb-4">
+      <h5 class="text-muted">{% if IS_KHMER %}លទ្ធផលស្វែងរកសម្រាប់{% else %}Search results for{% endif %}: "<strong>{{ query }}</strong>" ({{ destinations.count }})</h5>
+      <a href="{% url 'destinations_list' %}" class="btn btn-sm btn-outline-secondary rounded-pill">{{ "Clear All"|t }}</a>
+    </div>
+  {% endif %}
+
+  <div class="row g-4">
+    {% for dest in destinations %}
+      <div class="col-lg-4 col-md-6">
+        <div class="destination-card">
+          <img src="{{ dest.display_image }}" alt="{{ dest.name }}" class="destination-card-img" loading="lazy">
+          <div class="destination-card-overlay">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-primary bg-opacity-75 px-3 py-1 rounded-pill small">
+                {{ dest.country }}
+              </span>
+              {% if dest.is_featured %}
+                <span class="badge bg-warning text-dark px-2 py-1 rounded-pill small fw-bold">
+                  <i class="fa-solid fa-crown me-1"></i> {{ "Featured Destinations"|t }}
+                </span>
+              {% endif %}
+            </div>
+
+            <h4 class="text-white fw-bold mb-1">{{ dest.name }}</h4>
+            <p class="small text-white-50 mb-3 text-truncate-2">
+              {{ dest.description|truncatewords:15 }}
+            </p>
+
+            <div class="d-flex align-items-center justify-content-between pt-2 border-top border-secondary">
+              <span class="small text-white-50">
+                <i class="fa-solid fa-compass me-1 text-info"></i> {{ dest.package_count }} {{ "Tour Packages"|t }}
+              </span>
+              <a href="{% url 'destination_detail' dest.slug %}" class="btn btn-sm btn-light rounded-pill px-3 fw-semibold">
+                {{ "View Details"|t }}
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center py-5">
+        <i class="fa-solid fa-map-location-dot fs-1 text-muted mb-3"></i>
+        <h4>{{ "No tour packages found"|t }}</h4>
+        <p class="text-muted">{% if IS_KHMER %}សូមព្យាយាមស្វែងរកជាមួយពាក្យគន្លឹះផ្សេងទៀត។{% else %}Try a different search keyword or browse all destinations.{% endif %}</p>
+        <a href="{% url 'destinations_list' %}" class="btn btn-primary-custom">{{ "View All Destinations"|t }}</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

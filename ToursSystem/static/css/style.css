@@ -1,0 +1,509 @@
+/* ===================================================================
+   WANDERLUST JOURNEYS - MODERN TOURISM MANAGEMENT SYSTEM
+   Design System: Typography, Custom Color Palette, Micro-interactions
+   =================================================================== */
+
+@import url('https://fonts.googleapis.com/css2?family=Kantumruy+Pro:ital,wght@0,300..700;1,300..700&family=Plus+Jakarta+Sans:wght@300;400;500;600;700;800&family=Playfair+Display:ital,wght@0,600;0,700;1,600&display=swap');
+
+:root {
+  --primary: #0d9488;
+  --primary-dark: #0f766e;
+  --primary-light: #ccfbf1;
+  --primary-gradient: linear-gradient(135deg, #0d9488 0%, #0284c7 100%);
+  --secondary: #f59e0b;
+  --secondary-hover: #d97706;
+  --dark: #0f172a;
+  --dark-surface: #1e293b;
+  --muted: #64748b;
+  --light-bg: #f8fafc;
+  --border-color: #e2e8f0;
+  --card-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.06), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --card-hover-shadow: 0 20px 30px -10px rgba(15, 23, 42, 0.12), 0 10px 15px -5px rgba(15, 23, 42, 0.06);
+  --radius-lg: 1rem;
+  --radius-xl: 1.5rem;
+}
+
+body {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  color: #334155;
+  background-color: var(--light-bg);
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, .font-heading {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 700;
+  color: var(--dark);
+  letter-spacing: -0.02em;
+}
+
+.font-serif {
+  font-family: 'Playfair Display', serif;
+}
+
+/* -------------------------------------------------------------------
+   NAVBAR & HEADER
+   ------------------------------------------------------------------- */
+.navbar-custom {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid rgba(226, 232, 240, 0.8);
+  transition: all 0.3s ease;
+}
+
+.navbar-brand {
+  font-weight: 800;
+  font-size: 1.4rem;
+  color: var(--dark);
+  letter-spacing: -0.03em;
+}
+
+.brand-gradient {
+  background: var(--primary-gradient);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.nav-link {
+  font-weight: 600;
+  font-size: 0.95rem;
+  color: #475569 !important;
+  padding: 0.5rem 1rem !important;
+  border-radius: 0.5rem;
+  transition: all 0.2s ease;
+}
+
+.nav-link:hover, .nav-link.active {
+  color: var(--primary) !important;
+  background: var(--primary-light);
+}
+
+/* -------------------------------------------------------------------
+   BUTTONS
+   ------------------------------------------------------------------- */
+.btn-primary-custom {
+  background: var(--primary-gradient);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  padding: 0.65rem 1.4rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 14px rgba(13, 148, 136, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-primary-custom:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(13, 148, 136, 0.45);
+}
+
+.btn-outline-custom {
+  color: var(--primary);
+  border: 1.5px solid var(--primary);
+  background: transparent;
+  font-weight: 600;
+  padding: 0.6rem 1.3rem;
+  border-radius: 9999px;
+  transition: all 0.2s ease;
+}
+
+.btn-outline-custom:hover {
+  background: var(--primary);
+  color: #ffffff;
+}
+
+.btn-accent {
+  background: linear-gradient(135deg, #f59e0b 0%, #ea580c 100%);
+  color: #ffffff;
+  border: none;
+  font-weight: 600;
+  border-radius: 9999px;
+  padding: 0.65rem 1.4rem;
+  box-shadow: 0 4px 14px rgba(245, 158, 11, 0.35);
+  transition: all 0.25s ease;
+}
+
+.btn-accent:hover {
+  color: #ffffff;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(245, 158, 11, 0.5);
+}
+
+/* -------------------------------------------------------------------
+   HERO SECTION
+   ------------------------------------------------------------------- */
+.hero-section {
+  position: relative;
+  min-height: 85vh;
+  display: flex;
+  align-items: center;
+  background: linear-gradient(rgba(15, 23, 42, 0.55), rgba(15, 23, 42, 0.75)),
+              url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=1920&q=80') center/cover no-repeat;
+  color: #ffffff;
+  padding: 6rem 0;
+}
+
+.hero-title {
+  font-size: clamp(2.4rem, 5vw, 4rem);
+  font-weight: 800;
+  line-height: 1.15;
+  color: #ffffff;
+}
+
+.hero-subtitle {
+  font-size: 1.2rem;
+  color: #e2e8f0;
+  max-width: 650px;
+}
+
+.hero-search-card {
+  background: rgba(255, 255, 255, 0.98);
+  border-radius: var(--radius-xl);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.35);
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.6);
+  backdrop-filter: blur(16px);
+}
+
+/* -------------------------------------------------------------------
+   CARDS & HOVER EFFECTS
+   ------------------------------------------------------------------- */
+.tour-card {
+  background: #ffffff;
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-color);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.tour-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-hover-shadow);
+  border-color: #cbd5e1;
+}
+
+.tour-card-img-wrapper {
+  position: relative;
+  height: 220px;
+  overflow: hidden;
+}
+
+.tour-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.5s ease;
+}
+
+.tour-card:hover .tour-card-img {
+  transform: scale(1.06);
+}
+
+.badge-floating-top {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  background: rgba(15, 23, 42, 0.75);
+  backdrop-filter: blur(8px);
+  color: #ffffff;
+  font-weight: 600;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+}
+
+.badge-discount {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #ef4444;
+  color: #ffffff;
+  font-weight: 700;
+  font-size: 0.75rem;
+  padding: 0.35rem 0.65rem;
+  border-radius: 9999px;
+  box-shadow: 0 4px 8px rgba(239, 68, 68, 0.35);
+}
+
+.destination-card {
+  position: relative;
+  height: 320px;
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+  box-shadow: var(--card-shadow);
+  cursor: pointer;
+  transition: all 0.35s ease;
+}
+
+.destination-card:hover {
+  transform: translateY(-6px);
+  box-shadow: var(--card-hover-shadow);
+}
+
+.destination-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.destination-card:hover .destination-card-img {
+  transform: scale(1.08);
+}
+
+.destination-card-overlay {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.1) 0%, rgba(15, 23, 42, 0.85) 100%);
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  padding: 1.5rem;
+  color: #ffffff;
+}
+
+/* -------------------------------------------------------------------
+   PRICE & BADGES
+   ------------------------------------------------------------------- */
+.price-tag {
+  font-size: 1.35rem;
+  font-weight: 800;
+  color: var(--primary-dark);
+}
+
+.price-old {
+  font-size: 0.9rem;
+  text-decoration: line-through;
+  color: var(--muted);
+}
+
+.rating-stars {
+  color: #f59e0b;
+}
+
+/* -------------------------------------------------------------------
+   FEATURE ICONS & STATS COUNTERS
+   ------------------------------------------------------------------- */
+.feature-icon-box {
+  width: 60px;
+  height: 60px;
+  border-radius: 1rem;
+  background: var(--primary-light);
+  color: var(--primary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+  transition: all 0.3s ease;
+}
+
+.feature-card:hover .feature-icon-box {
+  background: var(--primary);
+  color: #ffffff;
+  transform: rotate(6deg) scale(1.05);
+}
+
+.stat-counter-box {
+  padding: 1.5rem;
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  box-shadow: var(--card-shadow);
+  text-align: center;
+}
+
+.stat-number {
+  font-size: 2.2rem;
+  font-weight: 800;
+  color: var(--primary);
+}
+
+/* -------------------------------------------------------------------
+   FOOTER
+   ------------------------------------------------------------------- */
+.footer-custom {
+  background: var(--dark);
+  color: #94a3b8;
+  padding-top: 4.5rem;
+  padding-bottom: 2rem;
+}
+
+.footer-custom h5 {
+  color: #ffffff;
+  font-weight: 700;
+  margin-bottom: 1.25rem;
+}
+
+.footer-link {
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.2s ease;
+  display: block;
+  margin-bottom: 0.5rem;
+}
+
+.footer-link:hover {
+  color: #ffffff;
+  padding-left: 4px;
+}
+
+/* -------------------------------------------------------------------
+   ADMIN PANEL STYLES
+   ------------------------------------------------------------------- */
+.admin-sidebar {
+  min-height: 100vh;
+  background: #0f172a;
+  color: #94a3b8;
+  box-shadow: 2px 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.admin-sidebar .nav-link {
+  color: #94a3b8 !important;
+  font-weight: 500;
+  padding: 0.75rem 1.25rem !important;
+  margin-bottom: 0.25rem;
+  border-radius: 0.5rem;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.admin-sidebar .nav-link:hover,
+.admin-sidebar .nav-link.active {
+  color: #ffffff !important;
+  background: #1e293b;
+}
+
+.admin-sidebar .nav-link i {
+  width: 20px;
+  text-align: center;
+}
+
+.kpi-card {
+  border-radius: var(--radius-lg);
+  background: #ffffff;
+  border: 1px solid var(--border-color);
+  padding: 1.5rem;
+  box-shadow: var(--card-shadow);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.kpi-icon {
+  width: 54px;
+  height: 54px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.4rem;
+}
+
+/* -------------------------------------------------------------------
+   PRINT VOUCHER / RECEIPT
+   ------------------------------------------------------------------- */
+@media print {
+  body {
+    background: #ffffff;
+  }
+  .navbar-custom, .footer-custom, .no-print {
+    display: none !important;
+  }
+  .print-area {
+    box-shadow: none !important;
+    border: 1px solid #000 !important;
+  }
+}
+
+/* -------------------------------------------------------------------
+   KHMER LANGUAGE TYPOGRAPHY & MULTI-LANGUAGE SWITCHER
+   ------------------------------------------------------------------- */
+html[lang="km"],
+body.lang-km,
+.lang-km {
+  font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif !important;
+  letter-spacing: 0;
+}
+
+html[lang="km"] h1, html[lang="km"] h2, html[lang="km"] h3,
+html[lang="km"] h4, html[lang="km"] h5, html[lang="km"] h6,
+.lang-km h1, .lang-km h2, .lang-km h3,
+.lang-km h4, .lang-km h5, .lang-km h6 {
+  font-family: 'Kantumruy Pro', 'Plus Jakarta Sans', sans-serif !important;
+  line-height: 1.45;
+  letter-spacing: 0;
+}
+
+.lang-switch-btn {
+  background: rgba(241, 245, 249, 0.85);
+  border: 1px solid var(--border-color);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.35rem 0.75rem;
+  border-radius: 9999px;
+  color: #334155;
+  transition: all 0.2s ease;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.lang-switch-btn:hover,
+.lang-switch-btn:focus {
+  background: #ffffff;
+  border-color: var(--primary);
+  color: var(--primary);
+  box-shadow: 0 2px 8px rgba(13, 148, 136, 0.15);
+}
+
+.lang-dropdown-menu {
+  min-width: 170px;
+  border-radius: 12px;
+  border: 1px solid rgba(226, 232, 240, 0.8);
+  box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.1);
+  padding: 0.4rem;
+}
+
+.lang-dropdown-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0.5rem 0.75rem;
+  border-radius: 8px;
+  font-size: 0.88rem;
+  font-weight: 500;
+  color: #334155;
+  text-decoration: none;
+  transition: all 0.15s ease;
+}
+
+.lang-dropdown-item:hover {
+  background: var(--primary-light);
+  color: var(--primary-dark);
+}
+
+.lang-dropdown-item.active {
+  background: rgba(13, 148, 136, 0.1);
+  color: var(--primary-dark);
+  font-weight: 700;
+}
+
+.admin-sidebar .lang-switch-btn {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+}
+
+.admin-sidebar .lang-switch-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: var(--secondary);
+  color: #ffffff;
+}
+

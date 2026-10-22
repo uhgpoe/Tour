@@ -1,0 +1,101 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block title %}Manage Bookings | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4 gap-3">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">Customer Bookings</h3>
+    <div class="text-muted small">Monitor, update status, and track travelers and payments.</div>
+  </div>
+
+  <!-- Status Filter Pills -->
+  <div class="d-flex flex-wrap gap-2">
+    <a href="{% url 'admin_bookings' %}" class="btn btn-sm {% if not status_filter %}btn-dark{% else %}btn-outline-secondary{% endif %} rounded-pill px-3">
+      All ({{ bookings.count }})
+    </a>
+    <a href="{% url 'admin_bookings' %}?status=Pending" class="btn btn-sm {% if status_filter == 'Pending' %}btn-warning text-dark{% else %}btn-outline-warning text-dark{% endif %} rounded-pill px-3">
+      Pending
+    </a>
+    <a href="{% url 'admin_bookings' %}?status=Confirmed" class="btn btn-sm {% if status_filter == 'Confirmed' %}btn-success{% else %}btn-outline-success{% endif %} rounded-pill px-3">
+      Confirmed
+    </a>
+    <a href="{% url 'admin_bookings' %}?status=Completed" class="btn btn-sm {% if status_filter == 'Completed' %}btn-info text-white{% else %}btn-outline-info{% endif %} rounded-pill px-3">
+      Completed
+    </a>
+    <a href="{% url 'admin_bookings' %}?status=Cancelled" class="btn btn-sm {% if status_filter == 'Cancelled' %}btn-danger{% else %}btn-outline-danger{% endif %} rounded-pill px-3">
+      Cancelled
+    </a>
+  </div>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light small text-uppercase">
+        <tr>
+          <th>Booking ID</th>
+          <th>Lead Customer</th>
+          <th>Tour Package</th>
+          <th>Travel Date</th>
+          <th>Guests</th>
+          <th>Total Amount</th>
+          <th>Status</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for b in bookings %}
+          <tr>
+            <td>
+              <span class="font-monospace fw-bold text-primary">{{ b.booking_number }}</span>
+              <div class="smaller text-muted" style="font-size: 0.75rem;">{{ b.created_at|date:"M d, Y H:i" }}</div>
+            </td>
+            <td>
+              <div class="fw-bold text-dark">{{ b.contact_name }}</div>
+              <div class="small text-muted">{{ b.contact_email }}</div>
+            </td>
+            <td>
+              <a href="{% url 'package_detail' b.package.slug %}" class="fw-semibold text-dark text-decoration-none" target="_blank">
+                {{ b.package.title|truncatewords:5 }}
+              </a>
+              <div class="smaller text-muted">{{ b.package.destination.name }}</div>
+            </td>
+            <td>
+              <span class="fw-semibold">{{ b.travel_date|date:"M d, Y" }}</span>
+            </td>
+            <td>{{ b.travelers_count }} guest{{ b.travelers_count|pluralize }}</td>
+            <td>
+              <span class="fw-bold fs-6">${{ b.total_price }}</span>
+              {% if b.payment %}
+                <div class="smaller text-success" style="font-size: 0.75rem;"><i class="fa-solid fa-circle-check"></i> Paid</div>
+              {% else %}
+                <div class="smaller text-danger" style="font-size: 0.75rem;"><i class="fa-solid fa-clock"></i> Unpaid</div>
+              {% endif %}
+            </td>
+            <td>
+              {% if b.status == 'Confirmed' %}
+                <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill px-3 py-1">Confirmed</span>
+              {% elif b.status == 'Pending' %}
+                <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill px-3 py-1">Pending</span>
+              {% elif b.status == 'Completed' %}
+                <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill px-3 py-1">Completed</span>
+              {% else %}
+                <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill px-3 py-1">Cancelled</span>
+              {% endif %}
+            </td>
+            <td class="text-end">
+              <a href="{% url 'admin_booking_detail' b.booking_number %}" class="btn btn-sm btn-primary-custom px-3">
+                Manage
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="8" class="text-center py-4 text-muted">No bookings found for the selected filter.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,332 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Discover The World's Most Extraordinary Journeys"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- 1. HERO SECTION WITH SEARCH BAR -->
+<section class="hero-section">
+  <div class="container">
+    <div class="row align-items-center">
+      <div class="col-lg-10 mx-auto text-center">
+        <span class="badge bg-white bg-opacity-25 text-white px-3 py-2 rounded-pill fw-semibold mb-3 backdrop-blur shadow-sm">
+          <i class="fa-solid fa-sparkles text-warning me-1"></i>
+          {% if IS_KHMER %}ពិភពលោកកំពុងរង់ចាំអ្នកធ្វើដំណើរទៅទស្សនា{% else %}The World Awaits Your Footsteps{% endif %}
+        </span>
+        <h1 class="hero-title mb-4">
+          {% if IS_KHMER %}
+            ស្វែងរក<span class="text-warning">គោលដៅទេសចរណ៍</span>ដ៏អស្ចារ្យបំផុតលើពិភពលោក
+          {% else %}
+            Discover Extraordinary <span class="text-warning">Destinations</span> Across The Globe
+          {% endif %}
+        </h1>
+        <p class="hero-subtitle mx-auto mb-5">
+          {{ "Handcrafted travel packages, unforgettable expeditions, and seamless luxury bookings tailored for you."|t }}
+        </p>
+
+        <!-- Floating Glassmorphic Search Form -->
+        <div class="hero-search-card text-start">
+          <form action="{% url 'packages_list' %}" method="GET" class="row g-3 align-items-end">
+            <!-- Keyword Search -->
+            <div class="col-lg-4 col-md-6">
+              <label class="form-label small fw-bold text-dark text-uppercase mb-1">
+                <i class="fa-solid fa-magnifying-glass text-primary me-1"></i> {{ "Search"|t }}
+              </label>
+              <input type="text" name="q" class="form-control form-control-lg border-light-subtle rounded-3 fs-6" placeholder="{% if IS_KHMER %}ឧ. សៀមរាប, បាលី, ភ្នំអាល់...{% else %}e.g. Bali, Swiss Alps, Safari...{% endif %}">
+            </div>
+
+            <!-- Destination Select -->
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-dark text-uppercase mb-1">
+                <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ "Destinations"|t }}
+              </label>
+              <select name="destination" class="form-select form-select-lg border-light-subtle rounded-3 fs-6">
+                <option value="">{{ "All Destinations"|t }}</option>
+                {% for dest in destinations %}
+                  <option value="{{ dest.id }}">{{ dest.name }} ({{ dest.country }})</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Category Select -->
+            <div class="col-lg-3 col-md-6">
+              <label class="form-label small fw-bold text-dark text-uppercase mb-1">
+                <i class="fa-solid fa-compass text-warning me-1"></i> {{ "Categories"|t }}
+              </label>
+              <select name="category" class="form-select form-select-lg border-light-subtle rounded-3 fs-6">
+                <option value="">{{ "All Categories"|t }}</option>
+                {% for key, val in categories %}
+                  <option value="{{ key }}">{{ val|t }}</option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Submit Button -->
+            <div class="col-lg-2 col-md-6">
+              <button type="submit" class="btn btn-primary-custom btn-lg w-100 rounded-3 py-2 d-flex align-items-center justify-content-center gap-2">
+                <i class="fa-solid fa-paper-plane"></i> {{ "Search"|t }}
+              </button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2. STATS COUNTER ROW -->
+<section class="py-5 bg-white border-bottom">
+  <div class="container">
+    <div class="row g-4 text-center">
+      <div class="col-6 col-md-3">
+        <div class="stat-counter-box border-0 shadow-none">
+          <div class="stat-number">{{ total_destinations }}+</div>
+          <div class="text-muted fw-semibold">{{ "Global Destinations"|t }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-counter-box border-0 shadow-none">
+          <div class="stat-number">{{ total_packages }}+</div>
+          <div class="text-muted fw-semibold">{{ "Curated Tour Packages"|t }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-counter-box border-0 shadow-none">
+          <div class="stat-number">12,500+</div>
+          <div class="text-muted fw-semibold">{{ "Happy Travelers"|t }}</div>
+        </div>
+      </div>
+      <div class="col-6 col-md-3">
+        <div class="stat-counter-box border-0 shadow-none">
+          <div class="stat-number">{{ avg_rating }}★</div>
+          <div class="text-muted fw-semibold">{{ "Guest Satisfaction"|t }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 3. FEATURED DESTINATIONS -->
+<section class="py-5 my-4">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 pb-2">
+      <div>
+        <span class="text-uppercase text-primary fw-bold small tracking-wider">Top Travel Spots</span>
+        <h2 class="display-6 fw-bold mb-0">{{ "Featured Destinations"|t }}</h2>
+      </div>
+      <a href="{% url 'destinations_list' %}" class="btn btn-outline-custom rounded-pill mt-3 mt-sm-0">
+        {{ "View All Destinations"|t }} <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for dest in featured_destinations %}
+        <div class="col-lg-4 col-md-6">
+          <a href="{% url 'destination_detail' dest.slug %}" class="text-decoration-none">
+            <div class="destination-card">
+              <img src="{{ dest.display_image }}" alt="{{ dest.name }}" class="destination-card-img" loading="lazy">
+              <div class="destination-card-overlay">
+                <span class="badge bg-primary bg-opacity-75 align-self-start mb-2 px-3 py-1 rounded-pill small">
+                  {{ dest.country }}
+                </span>
+                <h4 class="text-white fw-bold mb-1">{{ dest.name }}</h4>
+                <div class="small text-white-50 d-flex align-items-center gap-3">
+                  <span><i class="fa-solid fa-sun text-warning me-1"></i> {{ dest.climate }}</span>
+                  <span><i class="fa-solid fa-suitcase-rolling text-info me-1"></i> {{ dest.packages.count }} {{ "Tour Packages"|t }}</span>
+                </div>
+              </div>
+            </div>
+          </a>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 4. POPULAR TOUR PACKAGES -->
+<section class="py-5 bg-white border-top border-bottom">
+  <div class="container">
+    <div class="d-flex flex-wrap justify-content-between align-items-end mb-4 pb-2">
+      <div>
+        <span class="text-uppercase text-primary fw-bold small tracking-wider">Handcrafted Holidays</span>
+        <h2 class="display-6 fw-bold mb-0">{{ "Trending Tour Packages"|t }}</h2>
+      </div>
+      <a href="{% url 'packages_list' %}" class="btn btn-outline-custom rounded-pill mt-3 mt-sm-0">
+        {{ "Explore Packages"|t }} <i class="fa-solid fa-arrow-right ms-1"></i>
+      </a>
+    </div>
+
+    <div class="row g-4">
+      {% for pkg in popular_packages %}
+        <div class="col-lg-4 col-md-6">
+          <div class="tour-card">
+            <!-- Image with badges -->
+            <div class="tour-card-img-wrapper">
+              <img src="{{ pkg.display_image }}" alt="{{ pkg.title }}" class="tour-card-img" loading="lazy">
+              <div class="badge-floating-top">
+                <i class="fa-regular fa-clock me-1 text-warning"></i> {{ pkg.duration_days }} {{ "Days"|t }} / {{ pkg.duration_nights }} {{ "Nights"|t }}
+              </div>
+              {% if pkg.discount_percent > 0 %}
+                <div class="badge-discount">
+                  -{{ pkg.discount_percent }}% OFF
+                </div>
+              {% endif %}
+            </div>
+
+            <!-- Card Body -->
+            <div class="p-4 d-flex flex-column flex-grow-1">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <span class="badge bg-light text-primary border px-2 py-1 small fw-semibold">
+                  {{ pkg.get_category_display|t }}
+                </span>
+                <div class="rating-stars small">
+                  <i class="fa-solid fa-star"></i> {{ pkg.average_rating }}
+                  <span class="text-muted">({{ pkg.reviews_count }})</span>
+                </div>
+              </div>
+
+              <h5 class="fw-bold mb-2">
+                <a href="{% url 'package_detail' pkg.slug %}" class="text-dark text-decoration-none text-truncate-2">
+                  {{ pkg.title }}
+                </a>
+              </h5>
+
+              <p class="text-muted small mb-3 flex-grow-1">
+                {{ pkg.description|truncatewords:18 }}
+              </p>
+
+              <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-auto">
+                <div>
+                  <div class="text-muted small">{{ "Per Person"|t }}</div>
+                  <div class="d-flex align-items-baseline gap-2">
+                    <span class="price-tag">${{ pkg.current_price }}</span>
+                    {% if pkg.discount_price and pkg.discount_price < pkg.price %}
+                      <span class="price-old">${{ pkg.price }}</span>
+                    {% endif %}
+                  </div>
+                </div>
+
+                <a href="{% url 'package_detail' pkg.slug %}" class="btn btn-sm btn-primary-custom px-3 py-2">
+                  {{ "View Details"|t }}
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+
+<!-- 5. WHY CHOOSE US -->
+<section class="py-5 my-4">
+  <div class="container">
+    <div class="text-center max-w-700 mx-auto mb-5">
+      <span class="text-uppercase text-primary fw-bold small tracking-wider">Unmatched Excellence</span>
+      <h2 class="display-6 fw-bold">{{ "Why Choose Wanderlust"|t }}</h2>
+      <p class="text-muted">{{ "We combine obsessive attention to detail, transparent pricing, and local insider access to deliver memories that last a lifetime."|t }}</p>
+    </div>
+
+    <div class="row g-4">
+      <div class="col-md-3 col-sm-6">
+        <div class="p-4 rounded-4 bg-white border h-100 feature-card shadow-sm text-center">
+          <div class="feature-icon-box mx-auto">
+            <i class="fa-solid fa-tags"></i>
+          </div>
+          <h5 class="fw-bold mb-2">{{ "Best Price Guarantee"|t }}</h5>
+          <p class="text-muted small mb-0">Direct relationships with hotels and local operators ensure unbeatable luxury value with zero hidden costs.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="p-4 rounded-4 bg-white border h-100 feature-card shadow-sm text-center">
+          <div class="feature-icon-box mx-auto">
+            <i class="fa-solid fa-route"></i>
+          </div>
+          <h5 class="fw-bold mb-2">{{ "Handcrafted Experiences"|t }}</h5>
+          <p class="text-muted small mb-0">Every itinerary is rigorously tested by our travel designers to balance relaxation and iconic sights.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="p-4 rounded-4 bg-white border h-100 feature-card shadow-sm text-center">
+          <div class="feature-icon-box mx-auto">
+            <i class="fa-solid fa-award"></i>
+          </div>
+          <h5 class="fw-bold mb-2">{{ "Curated Destinations"|t }}</h5>
+          <p class="text-muted small mb-0">Explore like an insider with vetted, licensed local historians, naturalists, and multilingual specialists.</p>
+        </div>
+      </div>
+      <div class="col-md-3 col-sm-6">
+        <div class="p-4 rounded-4 bg-white border h-100 feature-card shadow-sm text-center">
+          <div class="feature-icon-box mx-auto">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <h5 class="fw-bold mb-2">{{ "24/7 Concierge Support"|t }}</h5>
+          <p class="text-muted small mb-0">Round-the-clock emergency assistance, flight tracking, and instant assistance anywhere in the world.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 6. TRAVELER TESTIMONIALS -->
+{% if latest_reviews %}
+<section class="py-5 bg-white border-top">
+  <div class="container">
+    <div class="text-center max-w-700 mx-auto mb-5">
+      <span class="text-uppercase text-primary fw-bold small tracking-wider">Real Stories</span>
+      <h2 class="display-6 fw-bold">{{ "What Our Travelers Say"|t }}</h2>
+    </div>
+
+    <div class="row g-4">
+      {% for review in latest_reviews %}
+        <div class="col-lg-4 col-md-6">
+          <div class="p-4 rounded-4 bg-light border h-100 d-flex flex-column justify-content-between shadow-sm">
+            <div>
+              <div class="d-flex text-warning mb-3">
+                {% for i in "12345" %}
+                  {% if forloop.counter <= review.rating %}
+                    <i class="fa-solid fa-star me-1"></i>
+                  {% else %}
+                    <i class="fa-regular fa-star me-1"></i>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <p class="text-secondary fst-italic small mb-4">
+                "{{ review.comment }}"
+              </p>
+            </div>
+            <div class="d-flex align-items-center gap-3 pt-3 border-top">
+              <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 42px; height: 42px;">
+                {{ review.user.first_name|default:review.user.username|make_list|first|upper }}
+              </div>
+              <div>
+                <div class="fw-bold text-dark small">{{ review.user.first_name }} {{ review.user.last_name }}</div>
+                <div class="text-muted smaller" style="font-size: 0.75rem;">Verified Traveler &bull; {{ review.package.title|truncatewords:4 }}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<!-- 7. CTA / NEWSLETTER -->
+<section class="py-5 text-white" style="background: linear-gradient(135deg, #0f766e 0%, #0369a1 100%);">
+  <div class="container py-4 text-center">
+    <h2 class="display-6 fw-bold mb-3">{{ "Ready For Your Next Journey?"|t }}</h2>
+    <p class="lead mb-4 max-w-700 mx-auto text-white-50">Create your free account today to browse member-only flight and hotel rates, track your bookings, and travel with peace of mind.</p>
+    <div class="d-flex justify-content-center gap-3 flex-wrap">
+      {% if not user.is_authenticated %}
+        <a href="{% url 'register' %}" class="btn btn-warning text-dark fw-bold px-4 py-2 rounded-pill shadow">
+          {{ "Join Free"|t }}
+        </a>
+      {% endif %}
+      <a href="{% url 'packages_list' %}" class="btn btn-outline-light fw-bold px-4 py-2 rounded-pill">
+        {{ "Explore Packages"|t }}
+      </a>
+    </div>
+  </div>
+</section>
+{% endblock %}

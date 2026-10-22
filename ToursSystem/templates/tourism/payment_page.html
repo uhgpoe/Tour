@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Payment Checkout"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Progress Header -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-8 text-center">
+      <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+        <span class="badge bg-success rounded-circle p-2" style="width: 32px; height: 32px;"><i class="fa-solid fa-check"></i></span>
+        <span class="text-success fw-bold">{{ "Contact Information"|t }}</span>
+        <i class="fa-solid fa-arrow-right text-muted mx-2"></i>
+        <span class="badge bg-primary rounded-circle p-2" style="width: 32px; height: 32px;">2</span>
+        <span class="fw-bold text-primary">{{ "Payments"|t }}</span>
+        <i class="fa-solid fa-arrow-right text-muted mx-2"></i>
+        <span class="badge bg-secondary rounded-circle p-2" style="width: 32px; height: 32px;">3</span>
+        <span class="text-muted">{{ "Booking Confirmation"|t }}</span>
+      </div>
+      <h2 class="fw-bold">{% if IS_KHMER %}បញ្ចប់ការទូទាត់ប្រាក់របស់អ្នក{% else %}Complete Your Payment{% endif %}</h2>
+      <p class="text-muted">{% if IS_KHMER %}ជ្រើសរើសវិធីសាស្ត្រទូទាត់ដែលអ្នកពេញចិត្តដើម្បីបញ្ចប់ការកក់។{% else %}Choose your preferred payment method to finalize your reservation.{% endif %}</p>
+    </div>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    <!-- LEFT: PAYMENT METHODS -->
+    <div class="col-lg-7">
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+        <h4 class="fw-bold mb-4 pb-2 border-bottom">
+          <i class="fa-regular fa-credit-card text-primary me-2"></i> {{ "Select Payment Method"|t }}
+        </h4>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <!-- Payment Options Radios -->
+          <div class="vstack gap-3 mb-4">
+            <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer hover-bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="payment_method" value="Credit Card" checked class="form-check-input">
+                <div>
+                  <div class="fw-bold text-dark">{{ "Credit / Debit Card"|t }}</div>
+                  <div class="small text-muted">Visa, Mastercard, American Express</div>
+                </div>
+              </div>
+              <div class="d-flex gap-2 fs-4 text-muted">
+                <i class="fa-brands fa-cc-visa text-primary"></i>
+                <i class="fa-brands fa-cc-mastercard text-danger"></i>
+                <i class="fa-brands fa-cc-amex text-info"></i>
+              </div>
+            </label>
+
+            <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer hover-bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="payment_method" value="PayPal" class="form-check-input">
+                <div>
+                  <div class="fw-bold text-dark">PayPal</div>
+                  <div class="small text-muted">Safe online payment via PayPal account</div>
+                </div>
+              </div>
+              <i class="fa-brands fa-paypal fs-3 text-primary"></i>
+            </label>
+
+            <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer hover-bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="payment_method" value="Bank Transfer" class="form-check-input">
+                <div>
+                  <div class="fw-bold text-dark">{{ "Direct Bank Transfer"|t }}</div>
+                  <div class="small text-muted">Direct invoice transfer with invoice reference</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-building-columns fs-3 text-secondary"></i>
+            </label>
+
+            <label class="p-3 border rounded-3 d-flex align-items-center justify-content-between cursor-pointer hover-bg-light">
+              <div class="d-flex align-items-center gap-3">
+                <input type="radio" name="payment_method" value="Cash" class="form-check-input">
+                <div>
+                  <div class="fw-bold text-dark">{{ "Cash on Arrival"|t }}</div>
+                  <div class="small text-muted">Pay at local desk upon hotel check-in</div>
+                </div>
+              </div>
+              <i class="fa-solid fa-money-bill-wave fs-3 text-success"></i>
+            </label>
+          </div>
+
+          <!-- Card Details Input Container -->
+          <div id="credit_card_details_section" class="p-4 rounded-3 bg-light border mb-4">
+            <h6 class="fw-bold text-dark mb-3">{% if IS_KHMER %}ព័ត៌មានកាត (ការសាកល្បង Demo){% else %}Card Information (Demo / Simulated){% endif %}</h6>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">{{ "Cardholder Name"|t }}</label>
+              <input type="text" name="card_holder" class="form-control" placeholder="Elena Rostova" value="{{ booking.contact_name }}">
+            </div>
+            <div class="mb-3">
+              <label class="form-label small fw-bold text-muted">{{ "Card Number"|t }}</label>
+              <div class="input-group">
+                <span class="input-group-text bg-white"><i class="fa-regular fa-credit-card text-muted"></i></span>
+                <input type="text" name="card_number" class="form-control" placeholder="4242 &bull;&bull;&bull;&bull; &bull;&bull;&bull;&bull; 4242" value="4242 5678 9012 3456" maxlength="19">
+              </div>
+            </div>
+            <div class="row g-2">
+              <div class="col-6">
+                <label class="form-label small fw-bold text-muted">{{ "Expiry Date"|t }}</label>
+                <input type="text" name="expiry" class="form-control" placeholder="12/28" value="12/28" maxlength="5">
+              </div>
+              <div class="col-6">
+                <label class="form-label small fw-bold text-muted">{{ "CVV / CVC"|t }}</label>
+                <input type="password" name="cvv" class="form-control" placeholder="123" value="123" maxlength="4">
+              </div>
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <a href="{% url 'customer_dashboard' %}" class="btn btn-outline-secondary rounded-pill px-4">
+              {{ "Cancel Booking"|t }}
+            </a>
+            <button type="submit" class="btn btn-primary-custom btn-lg rounded-pill px-5 fw-bold shadow">
+              {{ "Pay Now"|t }} (${{ booking.total_price }}) <i class="fa-solid fa-lock ms-2"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: INVOICE / BOOKING SUMMARY -->
+    <div class="col-lg-4">
+      <div class="bg-white p-4 rounded-4 border shadow-sm sticky-top" style="top: 90px;">
+        <h5 class="fw-bold mb-3 pb-2 border-bottom">{{ "Booking Details"|t }}</h5>
+
+        <div class="mb-3">
+          <div class="text-muted smaller">{{ "Booking Number"|t }}</div>
+          <div class="fw-bold font-monospace text-primary fs-5">{{ booking.booking_number }}</div>
+        </div>
+
+        <div class="d-flex gap-3 mb-3">
+          <img src="{{ booking.package.display_image }}" alt="{{ booking.package.title }}" class="rounded-3" style="width: 70px; height: 70px; object-fit: cover;">
+          <div>
+            <h6 class="fw-bold mb-1">{{ booking.package.title }}</h6>
+            <div class="small text-muted"><i class="fa-solid fa-location-dot text-danger me-1"></i> {{ booking.package.destination.name }}</div>
+          </div>
+        </div>
+
+        <div class="vstack gap-2 small text-secondary p-3 bg-light rounded-3 border mb-3">
+          <div class="d-flex justify-content-between">
+            <span>{{ "Travel Date"|t }}:</span>
+            <strong class="text-dark">{{ booking.travel_date|date:"F d, Y" }}</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>{{ "Group Size"|t }}:</span>
+            <strong class="text-dark">{{ booking.travelers_count }} {{ "Person"|t }}</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>{{ "Contact Information"|t }}:</span>
+            <strong class="text-dark">{{ booking.contact_name }}</strong>
+          </div>
+          <div class="d-flex justify-content-between">
+            <span>{{ "Unit Price"|t }}:</span>
+            <strong class="text-dark">${{ booking.package.current_price }}</strong>
+          </div>
+          <hr class="my-1">
+          <div class="d-flex justify-content-between fs-6 fw-bold text-dark">
+            <span>{{ "Total Price"|t }}:</span>
+            <span class="text-primary">${{ booking.total_price }}</span>
+          </div>
+        </div>
+
+        <div class="small text-muted">
+          <i class="fa-solid fa-shield-halved text-success me-1"></i>
+          {% if IS_KHMER %}ការការពារសុវត្ថិភាពទូទាត់ខ្ពស់តាម TLS។ ព័ត៌មានរបស់អ្នកមានសុវត្ថិភាព។{% else %}Encrypted with modern TLS protection. Your details are secure.{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ destination.name }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- Destination Hero Banner -->
+<div class="position-relative text-white py-5" style="background: linear-gradient(rgba(15, 23, 42, 0.6), rgba(15, 23, 42, 0.85)), url('{{ destination.display_image }}') center/cover no-repeat; min-height: 400px; display: flex; align-items: center;">
+  <div class="container py-4">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-3">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-white-50 text-decoration-none">Home</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'destinations_list' %}" class="text-white-50 text-decoration-none">Destinations</a></li>
+        <li class="breadcrumb-item active text-white" aria-current="page">{{ destination.name }}</li>
+      </ol>
+    </nav>
+
+    <div class="row align-items-center">
+      <div class="col-lg-8">
+        <span class="badge bg-primary px-3 py-1 rounded-pill mb-2 fw-semibold">
+          <i class="fa-solid fa-earth-americas me-1"></i> {{ destination.country }}
+        </span>
+        <h1 class="display-4 fw-bold mb-3">{{ destination.name }}</h1>
+        <p class="lead text-white-50 mb-4">{{ destination.description }}</p>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Destination Meta Bar -->
+<div class="bg-white border-bottom shadow-sm py-3">
+  <div class="container">
+    <div class="row g-3 text-center text-md-start">
+      <div class="col-md-4 col-sm-6 d-flex align-items-center gap-3">
+        <div class="feature-icon-box m-0 bg-primary-light text-primary">
+          <i class="fa-solid fa-calendar-check"></i>
+        </div>
+        <div>
+          <div class="text-muted small">Best Time to Visit</div>
+          <div class="fw-bold text-dark">{{ destination.best_time_to_visit }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-6 d-flex align-items-center gap-3">
+        <div class="feature-icon-box m-0 bg-primary-light text-primary">
+          <i class="fa-solid fa-cloud-sun"></i>
+        </div>
+        <div>
+          <div class="text-muted small">Average Climate</div>
+          <div class="fw-bold text-dark">{{ destination.climate }}</div>
+        </div>
+      </div>
+
+      <div class="col-md-4 col-sm-12 d-flex align-items-center gap-3">
+        <div class="feature-icon-box m-0 bg-primary-light text-primary">
+          <i class="fa-solid fa-city"></i>
+        </div>
+        <div>
+          <div class="text-muted small">Primary Regions</div>
+          <div class="fw-bold text-dark">{{ destination.city }}, {{ destination.country }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Packages in this Destination -->
+<div class="container py-5 my-3">
+  <div class="d-flex justify-content-between align-items-end mb-4">
+    <div>
+      <h3 class="fw-bold mb-1">Available Tour Packages in {{ destination.name }}</h3>
+      <p class="text-muted mb-0">Choose from {{ packages.count }} curated itinerary packages</p>
+    </div>
+  </div>
+
+  <div class="row g-4">
+    {% for pkg in packages %}
+      <div class="col-lg-4 col-md-6">
+        <div class="tour-card">
+          <div class="tour-card-img-wrapper">
+            <img src="{{ pkg.display_image }}" alt="{{ pkg.title }}" class="tour-card-img" loading="lazy">
+            <div class="badge-floating-top">
+              <i class="fa-regular fa-clock me-1 text-warning"></i> {{ pkg.duration_days }}D / {{ pkg.duration_nights }}N
+            </div>
+            {% if pkg.discount_percent > 0 %}
+              <div class="badge-discount">-{{ pkg.discount_percent }}% OFF</div>
+            {% endif %}
+          </div>
+
+          <div class="p-4 d-flex flex-column flex-grow-1">
+            <div class="d-flex justify-content-between align-items-center mb-2">
+              <span class="badge bg-light text-primary border px-2 py-1 small fw-semibold">
+                {{ pkg.get_category_display }}
+              </span>
+              <div class="rating-stars small">
+                <i class="fa-solid fa-star"></i> {{ pkg.average_rating }}
+                <span class="text-muted">({{ pkg.reviews_count }})</span>
+              </div>
+            </div>
+
+            <h5 class="fw-bold mb-2">
+              <a href="{% url 'package_detail' pkg.slug %}" class="text-dark text-decoration-none">
+                {{ pkg.title }}
+              </a>
+            </h5>
+
+            <p class="text-muted small mb-3 flex-grow-1">
+              {{ pkg.description|truncatewords:18 }}
+            </p>
+
+            <div class="d-flex align-items-center justify-content-between pt-3 border-top mt-auto">
+              <div>
+                <div class="text-muted small">Price per guest</div>
+                <div class="d-flex align-items-baseline gap-2">
+                  <span class="price-tag">${{ pkg.current_price }}</span>
+                  {% if pkg.discount_price and pkg.discount_price < pkg.price %}
+                    <span class="price-old">${{ pkg.price }}</span>
+                  {% endif %}
+                </div>
+              </div>
+
+              <a href="{% url 'package_detail' pkg.slug %}" class="btn btn-sm btn-primary-custom px-3 py-2">
+                Explore & Book
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    {% empty %}
+      <div class="col-12 text-center py-5">
+        <i class="fa-solid fa-suitcase-rolling fs-1 text-muted mb-3"></i>
+        <h4>No tour packages available yet for this destination</h4>
+        <p class="text-muted">Please check back soon or browse our other worldwide destinations.</p>
+        <a href="{% url 'packages_list' %}" class="btn btn-primary-custom">Browse All Packages</a>
+      </div>
+    {% endfor %}
+  </div>
+</div>
+{% endblock %}

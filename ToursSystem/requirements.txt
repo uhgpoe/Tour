@@ -1,0 +1,9 @@
+Django>=5.0,<6.0
+psycopg2-binary>=2.9.0
+PyMySQL>=1.1.0
+Pillow>=10.0.0
+Boto3>=1.28.0
+Whitenoise>=6.4.0
+# mysqlclient>=2.1.0
+pandas>=2.0.0
+requests>=2.31.0

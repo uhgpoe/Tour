@@ -1,0 +1,96 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Create Account | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="row g-0">
+          <!-- Left: Hero Photography Banner -->
+          <div class="col-md-5 d-none d-md-flex flex-column justify-content-between p-5 text-white" style="background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1469854523086-cc02fe5d8800?auto=format&fit=crop&w=800&q=80') center/cover;">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="fa-solid fa-earth-americas text-white fs-3"></i>
+                <span class="fs-4 fw-bold">Wander<span class="brand-gradient">lust</span></span>
+              </div>
+              <h3 class="fw-bold mb-3">Join Our Global Community of Travelers</h3>
+              <p class="small text-white-50">Create your account to unlock personalized recommendations, seamless booking, and 24/7 dedicated travel concierge.</p>
+            </div>
+
+            <div class="small text-white-50">
+              <i class="fa-solid fa-check text-success me-1"></i> Instant Confirmation<br>
+              <i class="fa-solid fa-check text-success me-1"></i> Best Price Guarantee<br>
+              <i class="fa-solid fa-check text-success me-1"></i> Verified Local Guides
+            </div>
+          </div>
+
+          <!-- Right: Registration Form -->
+          <div class="col-md-7 p-4 p-md-5 bg-white">
+            <h3 class="fw-bold text-dark mb-1">Create Account</h3>
+            <p class="text-muted small mb-4">Sign up in seconds to start planning your next journey.</p>
+
+            <form method="POST">
+              {% csrf_token %}
+
+              <div class="row g-2 mb-3">
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted">First Name</label>
+                  {{ form.first_name }}
+                  {% if form.first_name.errors %}<div class="text-danger small">{{ form.first_name.errors }}</div>{% endif %}
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted">Last Name</label>
+                  {{ form.last_name }}
+                  {% if form.last_name.errors %}<div class="text-danger small">{{ form.last_name.errors }}</div>{% endif %}
+                </div>
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Username *</label>
+                {{ form.username }}
+                {% if form.username.errors %}<div class="text-danger small">{{ form.username.errors }}</div>{% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Email Address *</label>
+                {{ form.email }}
+                {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+              </div>
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Phone Number</label>
+                {{ form.phone }}
+              </div>
+
+              <div class="row g-2 mb-4">
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted">Password *</label>
+                  {{ form.password }}
+                  {% if form.password.errors %}<div class="text-danger small">{{ form.password.errors }}</div>{% endif %}
+                </div>
+                <div class="col-6">
+                  <label class="form-label small fw-bold text-muted">Confirm Password *</label>
+                  {{ form.confirm_password }}
+                  {% if form.confirm_password.errors %}<div class="text-danger small">{{ form.confirm_password.errors }}</div>{% endif %}
+                </div>
+              </div>
+
+              <button type="submit" class="btn btn-primary-custom btn-lg w-100 rounded-pill py-2 fw-bold shadow mb-3">
+                Register & Start Exploring <i class="fa-solid fa-arrow-right ms-1"></i>
+              </button>
+
+              <div class="text-center small text-muted">
+                Already have an account?
+                <a href="{% url 'login' %}" class="fw-bold text-primary text-decoration-none">Sign In</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

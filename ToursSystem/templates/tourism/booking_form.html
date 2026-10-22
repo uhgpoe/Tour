@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Book Tour Package"|t }} - {{ package.title }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Progress Header -->
+  <div class="row justify-content-center mb-5">
+    <div class="col-lg-8 text-center">
+      <div class="d-flex align-items-center justify-content-center gap-2 mb-3">
+        <span class="badge bg-primary rounded-circle p-2" style="width: 32px; height: 32px;">1</span>
+        <span class="fw-bold text-primary">{{ "Contact Information"|t }}</span>
+        <i class="fa-solid fa-arrow-right text-muted mx-2"></i>
+        <span class="badge bg-secondary rounded-circle p-2" style="width: 32px; height: 32px;">2</span>
+        <span class="text-muted">{{ "Payments"|t }}</span>
+        <i class="fa-solid fa-arrow-right text-muted mx-2"></i>
+        <span class="badge bg-secondary rounded-circle p-2" style="width: 32px; height: 32px;">3</span>
+        <span class="text-muted">{{ "Booking Confirmation"|t }}</span>
+      </div>
+      <h2 class="fw-bold">{% if IS_KHMER %}កក់ដំណើរផ្សងព្រេងរបស់អ្នក{% else %}Reserve Your Adventure{% endif %}</h2>
+      <p class="text-muted">{% if IS_KHMER %}សូមបំពេញព័ត៌មានខាងក្រោមដើម្បីបន្តទៅការទូទាត់ប្រាក់ដោយសុវត្ថិភាព។{% else %}Fill in your travel information to proceed to secure reservation.{% endif %}</p>
+    </div>
+  </div>
+
+  <div class="row g-4 justify-content-center">
+    <!-- LEFT: BOOKING FORM -->
+    <div class="col-lg-7">
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+        <h4 class="fw-bold mb-4 pb-2 border-bottom">
+          <i class="fa-solid fa-user-pen text-primary me-2"></i> {{ "Contact Information"|t }}
+        </h4>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Full Name"|t }} *</label>
+              {{ form.contact_name }}
+              {% if form.contact_name.errors %}
+                <div class="text-danger small mt-1">{{ form.contact_name.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Email Address"|t }} *</label>
+              {{ form.contact_email }}
+              {% if form.contact_email.errors %}
+                <div class="text-danger small mt-1">{{ form.contact_email.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Phone Number"|t }} *</label>
+              {{ form.contact_phone }}
+              {% if form.contact_phone.errors %}
+                <div class="text-danger small mt-1">{{ form.contact_phone.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Travel Date"|t }} *</label>
+              {{ form.travel_date }}
+              <div class="form-text small">{% if IS_KHMER %}ជ្រើសរើសថ្ងៃធ្វើដំណើរយ៉ាងតិច ២៤ ម៉ោងមុន។{% else %}Select date at least 24 hours in advance.{% endif %}</div>
+              {% if form.travel_date.errors %}
+                <div class="text-danger small mt-1">{{ form.travel_date.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Number of Travelers"|t }} *</label>
+              <div class="input-group">
+                <button class="btn btn-outline-secondary" type="button" id="btn_guests_minus"><i class="fa-solid fa-minus"></i></button>
+                {{ form.travelers_count }}
+                <button class="btn btn-outline-secondary" type="button" id="btn_guests_plus"><i class="fa-solid fa-plus"></i></button>
+              </div>
+              {% if form.travelers_count.errors %}
+                <div class="text-danger small mt-1">{{ form.travelers_count.errors }}</div>
+              {% endif %}
+            </div>
+
+            <div class="col-12">
+              <label class="form-label small fw-bold text-uppercase text-muted">{{ "Special Requests or Notes"|t }}</label>
+              {{ form.special_requests }}
+            </div>
+          </div>
+
+          <div class="d-flex justify-content-between align-items-center pt-3 border-top">
+            <a href="{% url 'package_detail' package.slug %}" class="btn btn-outline-secondary rounded-pill px-4">
+              <i class="fa-solid fa-arrow-left me-1"></i> {{ "View Details"|t }}
+            </a>
+            <button type="submit" class="btn btn-primary-custom rounded-pill px-5 py-2 fw-bold">
+              {{ "Proceed to Payment"|t }} <i class="fa-solid fa-arrow-right ms-1"></i>
+            </button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT: ORDER SUMMARY -->
+    <div class="col-lg-4">
+      <div class="bg-white p-4 rounded-4 border shadow-sm sticky-top" style="top: 90px;">
+        <h5 class="fw-bold mb-3 pb-2 border-bottom">{{ "Order Summary"|t }}</h5>
+
+        <div class="d-flex gap-3 mb-3">
+          <img src="{{ package.display_image }}" alt="{{ package.title }}" class="rounded-3" style="width: 80px; height: 80px; object-fit: cover;">
+          <div>
+            <span class="badge bg-light text-primary border small mb-1">{{ package.get_category_display|t }}</span>
+            <h6 class="fw-bold mb-1">{{ package.title }}</h6>
+            <div class="small text-muted"><i class="fa-regular fa-clock me-1 text-warning"></i> {{ package.duration_days }} {{ "Days"|t }}</div>
+          </div>
+        </div>
+
+        <div class="p-3 bg-light rounded-3 border mb-3">
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{{ "Unit Price"|t }}:</span>
+            <span class="fw-bold text-dark" id="unit_price_val" data-price="{{ package.current_price }}">${{ package.current_price }}</span>
+          </div>
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{{ "Subtotal"|t }}:</span>
+            <span id="calculated_subtotal" class="fw-bold text-dark">${{ package.current_price }}</span>
+          </div>
+          <div class="d-flex justify-content-between small text-muted mb-1">
+            <span>{% if IS_KHMER %}ពន្ធ និងសេវា{% else %}Taxes & Fees{% endif %}:</span>
+            <span class="text-success fw-semibold">{% if IS_KHMER %}ឥតគិតថ្លៃ{% else %}Free{% endif %}</span>
+          </div>
+          <hr class="my-2">
+          <div class="d-flex justify-content-between fw-bold text-dark fs-5">
+            <span>{{ "Total Price"|t }}:</span>
+            <span id="calculated_total_price" class="text-primary">${{ package.current_price }}</span>
+          </div>
+        </div>
+
+        <div class="small text-muted vstack gap-2">
+          <div><i class="fa-solid fa-lock text-success me-2"></i> 256-Bit SSL Encrypted Checkout</div>
+          <div><i class="fa-solid fa-rotate-left text-primary me-2"></i> {% if IS_KHMER %}អាចប្តូរកាលបរិច្ឆេទធ្វើដំណើរបានដោយបត់បែន{% else %}Flexible date rescheduling available{% endif %}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

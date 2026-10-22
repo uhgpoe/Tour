@@ -1,0 +1,64 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Sign In | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5 my-3">
+  <div class="row justify-content-center">
+    <div class="col-lg-10 col-xl-9">
+      <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+        <div class="row g-0">
+          <!-- Left: Hero Photography Banner -->
+          <div class="col-md-5 d-none d-md-flex flex-column justify-content-between p-5 text-white" style="background: linear-gradient(rgba(15, 23, 42, 0.65), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=80') center/cover;">
+            <div>
+              <div class="d-flex align-items-center gap-2 mb-4">
+                <i class="fa-solid fa-earth-americas text-white fs-3"></i>
+                <span class="fs-4 fw-bold">Wander<span class="brand-gradient">lust</span></span>
+              </div>
+              <h3 class="fw-bold mb-3">Begin Your Next Great Journey</h3>
+              <p class="small text-white-50">Log in to view your itinerary vouchers, manage reservations, and unlock exclusive private rates.</p>
+            </div>
+
+            <!-- Demo Logins Helper -->
+            <div class="p-3 rounded-3 bg-white bg-opacity-10 backdrop-blur border border-white border-opacity-25 small">
+              <div class="fw-bold mb-1"><i class="fa-solid fa-key me-1 text-warning"></i> Quick Demo Accounts:</div>
+              <div class="smaller text-white-50">Admin: <code>admin</code> / <code>admin123</code></div>
+              <div class="smaller text-white-50">Customer: <code>traveler</code> / <code>traveler123</code></div>
+            </div>
+          </div>
+
+          <!-- Right: Login Form -->
+          <div class="col-md-7 p-4 p-md-5 bg-white">
+            <h3 class="fw-bold text-dark mb-1">Welcome Back</h3>
+            <p class="text-muted small mb-4">Enter your credentials to access your traveler account.</p>
+
+            <form method="POST">
+              {% csrf_token %}
+
+              <div class="mb-3">
+                <label class="form-label small fw-bold text-muted">Username</label>
+                {{ form.username }}
+              </div>
+
+              <div class="mb-4">
+                <label class="form-label small fw-bold text-muted">Password</label>
+                {{ form.password }}
+              </div>
+
+              <button type="submit" class="btn btn-primary-custom btn-lg w-100 rounded-pill py-2 fw-bold shadow mb-3">
+                Sign In <i class="fa-solid fa-arrow-right-to-bracket ms-1"></i>
+              </button>
+
+              <div class="text-center small text-muted">
+                Don't have an account yet?
+                <a href="{% url 'register' %}" class="fw-bold text-primary text-decoration-none">Create Account</a>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

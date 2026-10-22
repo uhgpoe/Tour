@@ -1,0 +1,263 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Dashboard"|t }} | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<!-- Top Header -->
+<div class="d-flex flex-wrap justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">{{ "Tourism System Dashboard"|t }}</h3>
+    <div class="text-muted small">{% if IS_KHMER %}ទិន្នន័យការកក់តាមពេលវេលាជាក់ស្តែង សូចនាករហិរញ្ញវត្ថុ និងប្រតិបត្តិការ{% else %}Real-time bookings, financial metrics, and operational performance.{% endif %}</div>
+  </div>
+  <div class="d-flex gap-2 mt-3 mt-sm-0">
+    <a href="{% url 'admin_package_add' %}" class="btn btn-sm btn-primary-custom rounded-pill">
+      <i class="fa-solid fa-plus me-1"></i> {{ "Add New Tour Package"|t }}
+    </a>
+    <a href="{% url 'admin_destination_add' %}" class="btn btn-sm btn-outline-custom rounded-pill">
+      <i class="fa-solid fa-location-plus me-1"></i> {{ "Add New Destination"|t }}
+    </a>
+  </div>
+</div>
+
+<!-- 4 KPI CARDS -->
+<div class="row g-3 mb-4">
+  <!-- Revenue Card -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="kpi-card">
+      <div>
+        <div class="text-muted small text-uppercase fw-bold">{{ "Total Revenue"|t }}</div>
+        <div class="fs-3 fw-bold text-dark mt-1">${{ total_revenue|floatformat:2 }}</div>
+        <div class="small text-success mt-1"><i class="fa-solid fa-arrow-trend-up me-1"></i> {% if IS_KHMER %}ដំណើរការតាម Gateway{% else %}Processed via Gateway{% endif %}</div>
+      </div>
+      <div class="kpi-icon bg-success bg-opacity-10 text-success">
+        <i class="fa-solid fa-dollar-sign"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bookings Card -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="kpi-card">
+      <div>
+        <div class="text-muted small text-uppercase fw-bold">{{ "Total Bookings"|t }}</div>
+        <div class="fs-3 fw-bold text-dark mt-1">{{ total_bookings }}</div>
+        <div class="small text-warning mt-1"><i class="fa-solid fa-clock me-1"></i> {{ pending_bookings }} {{ "Pending"|t }}</div>
+      </div>
+      <div class="kpi-icon bg-primary bg-opacity-10 text-primary">
+        <i class="fa-solid fa-calendar-check"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Active Packages Card -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="kpi-card">
+      <div>
+        <div class="text-muted small text-uppercase fw-bold">{{ "Tour Packages"|t }}</div>
+        <div class="fs-3 fw-bold text-dark mt-1">{{ total_packages }}</div>
+        <div class="small text-info mt-1"><i class="fa-solid fa-map me-1"></i> {{ total_destinations }} {{ "Destinations"|t }}</div>
+      </div>
+      <div class="kpi-icon bg-info bg-opacity-10 text-info">
+        <i class="fa-solid fa-compass"></i>
+      </div>
+    </div>
+  </div>
+
+  <!-- Customers Card -->
+  <div class="col-xl-3 col-sm-6">
+    <div class="kpi-card">
+      <div>
+        <div class="text-muted small text-uppercase fw-bold">{{ "Customers"|t }}</div>
+        <div class="fs-3 fw-bold text-dark mt-1">{{ total_customers }}</div>
+        <div class="small text-primary mt-1"><i class="fa-solid fa-user-check me-1"></i> {{ "Happy Travelers"|t }}</div>
+      </div>
+      <div class="kpi-icon bg-warning bg-opacity-10 text-warning">
+        <i class="fa-solid fa-users"></i>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- CHARTS ROW -->
+<div class="row g-4 mb-4">
+  <!-- Chart 1: Revenue by Category -->
+  <div class="col-lg-8">
+    <div class="bg-white p-4 rounded-4 border shadow-sm h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">{% if IS_KHMER %}ចំណូលតាមប្រភេទទេសចរណ៍{% else %}Revenue by Tour Category{% endif %}</h5>
+        <span class="badge bg-light text-muted border">{{ "Total Revenue"|t }}</span>
+      </div>
+      <div style="height: 280px;">
+        <canvas id="categoryRevenueChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Chart 2: Booking Status Breakdown -->
+  <div class="col-lg-4">
+    <div class="bg-white p-4 rounded-4 border shadow-sm h-100">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">{% if IS_KHMER %}ស្ថានភាពនៃការកក់{% else %}Booking Status{% endif %}</h5>
+        <span class="badge bg-light text-muted border">{{ "Distribution"|t }}</span>
+      </div>
+      <div style="height: 280px; position: relative;">
+        <canvas id="bookingStatusChart"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RECENT BOOKINGS & INQUIRIES -->
+<div class="row g-4">
+  <!-- Recent Bookings Table -->
+  <div class="col-lg-8">
+    <div class="bg-white p-4 rounded-4 border shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">{{ "Recent Bookings"|t }}</h5>
+        <a href="{% url 'admin_bookings' %}" class="small text-decoration-none fw-semibold">{{ "View"|t }} {{ "All Destinations"|t }}</a>
+      </div>
+
+      <div class="table-responsive">
+        <table class="table table-hover align-middle small mb-0">
+          <thead class="table-light">
+            <tr>
+              <th>ID</th>
+              <th>{{ "Customer"|t }}</th>
+              <th>{{ "Package"|t }}</th>
+              <th>{{ "Date"|t }}</th>
+              <th>{{ "Total Price"|t }}</th>
+              <th>{{ "Status"|t }}</th>
+              <th class="text-end">{{ "Actions"|t }}</th>
+            </tr>
+          </thead>
+          <tbody>
+            {% for b in recent_bookings %}
+              <tr>
+                <td class="font-monospace fw-bold text-primary">{{ b.booking_number }}</td>
+                <td>{{ b.contact_name }}</td>
+                <td>{{ b.package.title|truncatewords:4 }}</td>
+                <td>{{ b.travel_date|date:"M d" }}</td>
+                <td class="fw-bold">${{ b.total_price }}</td>
+                <td>
+                  {% if b.status == 'Confirmed' %}
+                    <span class="badge bg-success-subtle text-success border border-success-subtle rounded-pill">{{ "Confirmed"|t }}</span>
+                  {% elif b.status == 'Pending' %}
+                    <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle rounded-pill">{{ "Pending"|t }}</span>
+                  {% elif b.status == 'Completed' %}
+                    <span class="badge bg-info-subtle text-info border border-info-subtle rounded-pill">{{ "Completed"|t }}</span>
+                  {% else %}
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle rounded-pill">{{ "Cancelled"|t }}</span>
+                  {% endif %}
+                </td>
+                <td class="text-end">
+                  <a href="{% url 'admin_booking_detail' b.booking_number %}" class="btn btn-sm btn-light border px-2 py-1">
+                    {{ "View Details"|t }}
+                  </a>
+                </td>
+              </tr>
+            {% empty %}
+              <tr><td colspan="7" class="text-center py-3 text-muted">{% if IS_KHMER %}មិនទាន់មានទិន្នន័យការកក់នៅឡើយទេ។{% else %}No bookings recorded yet.{% endif %}</td></tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Recent Inquiries -->
+  <div class="col-lg-4">
+    <div class="bg-white p-4 rounded-4 border shadow-sm">
+      <div class="d-flex justify-content-between align-items-center mb-3">
+        <h5 class="fw-bold mb-0">{{ "Recent Inquiries"|t }}</h5>
+        <a href="{% url 'admin_messages' %}" class="small text-decoration-none fw-semibold">
+          {{ "View"|t }} ({{ unread_messages }})
+        </a>
+      </div>
+
+      <div class="vstack gap-3">
+        {% for msg in recent_messages %}
+          <div class="p-3 rounded-3 {% if not msg.is_read %}bg-primary-light border border-primary-subtle{% else %}bg-light border{% endif %}">
+            <div class="d-flex justify-content-between align-items-center mb-1">
+              <strong class="text-dark small">{{ msg.name }}</strong>
+              <span class="text-muted smaller" style="font-size: 0.75rem;">{{ msg.created_at|date:"M d" }}</span>
+            </div>
+            <div class="fw-semibold text-secondary small text-truncate">{{ msg.subject }}</div>
+            <p class="small text-muted mb-0 text-truncate">{{ msg.message }}</p>
+          </div>
+        {% empty %}
+          <div class="text-muted small text-center py-4">{% if IS_KHMER %}មិនមានសារទំនាក់ទំនងថ្មីទេ។{% else %}No contact messages.{% endif %}</div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}
+
+{% block admin_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function () {
+  // 1. Booking Status Doughnut Chart
+  const statusData = JSON.parse('{{ status_chart_json|escapejs }}');
+  const ctxStatus = document.getElementById('bookingStatusChart').getContext('2d');
+  new Chart(ctxStatus, {
+    type: 'doughnut',
+    data: {
+      labels: statusData.labels,
+      datasets: [{
+        data: statusData.data,
+        backgroundColor: ['#10b981', '#f59e0b', '#0ea5e9', '#ef4444'],
+        borderWidth: 0,
+        hoverOffset: 4
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { boxWidth: 12, font: { family: 'Plus Jakarta Sans', size: 12 } }
+        }
+      },
+      cutout: '70%'
+    }
+  });
+
+  // 2. Revenue by Category Bar Chart
+  const categoryData = JSON.parse('{{ category_chart_json|escapejs }}');
+  const ctxCat = document.getElementById('categoryRevenueChart').getContext('2d');
+  new Chart(ctxCat, {
+    type: 'bar',
+    data: {
+      labels: categoryData.labels,
+      datasets: [{
+        label: 'Revenue ($ USD)',
+        data: categoryData.data,
+        backgroundColor: '#0d9488',
+        borderRadius: 8,
+      }]
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      plugins: {
+        legend: { display: false }
+      },
+      scales: {
+        y: {
+          beginAtZero: true,
+          ticks: {
+            callback: function(value) { return '$' + value.toLocaleString(); }
+          },
+          grid: { color: '#f1f5f9' }
+        },
+        x: {
+          grid: { display: false }
+        }
+      }
+    }
+  });
+});
+</script>
+{% endblock %}

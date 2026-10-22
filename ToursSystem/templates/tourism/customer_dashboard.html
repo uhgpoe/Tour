@@ -1,0 +1,227 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Customer Dashboard"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <!-- Profile & Welcome Banner -->
+  <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm mb-4">
+    <div class="row align-items-center g-4">
+      <div class="col-auto">
+        {% if profile.profile_pic %}
+          <img src="{{ profile.profile_pic.url }}" alt="Profile" class="rounded-circle border" style="width: 80px; height: 80px; object-fit: cover;">
+        {% else %}
+          <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold fs-2" style="width: 80px; height: 80px;">
+            {{ user.first_name|default:user.username|make_list|first|upper }}
+          </div>
+        {% endif %}
+      </div>
+      <div class="col">
+        <h2 class="fw-bold mb-1">{% if IS_KHMER %}សូមស្វាគមន៍មកវិញ, {{ user.first_name|default:user.username }}!{% else %}Welcome back, {{ user.first_name|default:user.username }}!{% endif %}</h2>
+        <div class="text-muted small">
+          <i class="fa-solid fa-envelope me-1"></i> {{ user.email }} &bull;
+          <i class="fa-solid fa-phone ms-2 me-1"></i> {{ profile.phone|default:'No phone added' }} &bull;
+          <i class="fa-solid fa-location-dot ms-2 me-1"></i> {{ profile.city|default:'Traveler' }}, {{ profile.country|default:'Global' }}
+        </div>
+      </div>
+      <div class="col-auto">
+        <a href="{% url 'packages_list' %}" class="btn btn-primary-custom rounded-pill">
+          <i class="fa-solid fa-plus me-1"></i> {{ "Explore Packages"|t }}
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- KPI Counters -->
+  <div class="row g-3 mb-4">
+    <div class="col-6 col-md-3">
+      <div class="stat-counter-box">
+        <div class="stat-number fs-3">{{ bookings.count }}</div>
+        <div class="text-muted small fw-semibold">{{ "Total Bookings"|t }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-counter-box">
+        <div class="stat-number fs-3 text-warning">{{ active_bookings }}</div>
+        <div class="text-muted small fw-semibold">{{ "Active Bookings"|t }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-counter-box">
+        <div class="stat-number fs-3 text-success">{{ completed_trips }}</div>
+        <div class="text-muted small fw-semibold">{{ "Completed Trips"|t }}</div>
+      </div>
+    </div>
+    <div class="col-6 col-md-3">
+      <div class="stat-counter-box">
+        <div class="stat-number fs-3 text-primary">${{ total_spent }}</div>
+        <div class="text-muted small fw-semibold">{{ "Total Spent"|t }}</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dashboard Tabs (Bookings & Profile) -->
+  <div class="bg-white rounded-4 border shadow-sm overflow-hidden">
+    <ul class="nav nav-tabs nav-fill bg-light border-bottom" id="dashboardTab" role="tablist">
+      <li class="nav-item" role="presentation">
+        <button class="nav-link active py-3 fw-bold border-0 border-bottom border-primary border-3" id="bookings-tab" data-bs-toggle="tab" data-bs-target="#bookings-tab-pane" type="button" role="tab" aria-controls="bookings-tab-pane" aria-selected="true">
+          <i class="fa-solid fa-suitcase-rolling me-2 text-primary"></i> {{ "Booking History"|t }} ({{ bookings.count }})
+        </button>
+      </li>
+      <li class="nav-item" role="presentation">
+        <button class="nav-link py-3 fw-bold border-0" id="profile-tab" data-bs-toggle="tab" data-bs-target="#profile-tab-pane" type="button" role="tab" aria-controls="profile-tab-pane" aria-selected="false">
+          <i class="fa-solid fa-user-gear me-2 text-primary"></i> {{ "My Profile"|t }}
+        </button>
+      </li>
+    </ul>
+
+    <div class="tab-content p-4 p-md-5" id="dashboardTabContent">
+      <!-- TAB 1: BOOKINGS -->
+      <div class="tab-pane fade show active" id="bookings-tab-pane" role="tabpanel" aria-labelledby="bookings-tab" tabindex="0">
+        {% if bookings %}
+          <div class="table-responsive">
+            <table class="table table-hover align-middle">
+              <thead class="table-light small text-uppercase">
+                <tr>
+                  <th>{{ "Booking Number"|t }}</th>
+                  <th>{{ "Tour Packages"|t }}</th>
+                  <th>{{ "Travel Date"|t }}</th>
+                  <th>{{ "Group Size"|t }}</th>
+                  <th>{{ "Total Price"|t }}</th>
+                  <th>{{ "Status"|t }}</th>
+                  <th class="text-end">{{ "Actions"|t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for b in bookings %}
+                  <tr>
+                    <td>
+                      <span class="font-monospace fw-bold text-primary">{{ b.booking_number }}</span>
+                      <div class="smaller text-muted" style="font-size: 0.75rem;">{{ b.created_at|date:"M d, Y" }}</div>
+                    </td>
+                    <td>
+                      <div class="d-flex align-items-center gap-2">
+                        <img src="{{ b.package.display_image }}" alt="{{ b.package.title }}" class="rounded-2" style="width: 44px; height: 44px; object-fit: cover;">
+                        <div>
+                          <a href="{% url 'package_detail' b.package.slug %}" class="fw-bold text-dark text-decoration-none">
+                            {{ b.package.title|truncatewords:5 }}
+                          </a>
+                          <div class="smaller text-muted">{{ b.package.destination.name }}</div>
+                        </div>
+                      </div>
+                    </td>
+                    <td>
+                      <span class="fw-semibold">{{ b.travel_date|date:"M d, Y" }}</span>
+                    </td>
+                    <td>{{ b.travelers_count }} {{ "Person"|t }}</td>
+                    <td>
+                      <span class="fw-bold">${{ b.total_price }}</span>
+                    </td>
+                    <td>
+                      {% if b.status == 'Confirmed' %}
+                        <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-1 rounded-pill">{{ "Confirmed"|t }}</span>
+                      {% elif b.status == 'Pending' %}
+                        <span class="badge bg-warning-subtle text-warning-emphasis border border-warning-subtle px-3 py-1 rounded-pill">{{ "Pending"|t }}</span>
+                      {% elif b.status == 'Completed' %}
+                        <span class="badge bg-info-subtle text-info border border-info-subtle px-3 py-1 rounded-pill">{{ "Completed"|t }}</span>
+                      {% else %}
+                        <span class="badge bg-danger-subtle text-danger border border-danger-subtle px-3 py-1 rounded-pill">{{ "Cancelled"|t }}</span>
+                      {% endif %}
+                    </td>
+                    <td class="text-end">
+                      <div class="dropdown">
+                        <button class="btn btn-sm btn-light border dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                          {{ "Actions"|t }}
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                          <li>
+                            <a class="dropdown-item small" href="{% url 'booking_confirmation' b.booking_number %}">
+                              <i class="fa-solid fa-file-invoice text-primary me-2"></i> {{ "Print Voucher"|t }}
+                            </a>
+                          </li>
+                          {% if b.status == 'Pending' %}
+                            <li>
+                              <a class="dropdown-item small text-success fw-bold" href="{% url 'process_payment' b.booking_number %}">
+                                <i class="fa-solid fa-credit-card me-2"></i> {{ "Pay Now"|t }} (${{ b.total_price }})
+                              </a>
+                            </li>
+                          {% endif %}
+                          {% if b.status in 'Pending Confirmed' %}
+                            <li><hr class="dropdown-divider"></li>
+                            <li>
+                              <a class="dropdown-item small text-danger" href="{% url 'cancel_booking' b.booking_number %}" onclick="return confirm('Are you sure you want to cancel booking #{{ b.booking_number }}?');">
+                                <i class="fa-solid fa-ban me-2"></i> {{ "Cancel Booking"|t }}
+                              </a>
+                            </li>
+                          {% endif %}
+                        </ul>
+                      </div>
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          </div>
+        {% else %}
+          <div class="text-center py-5">
+            <i class="fa-solid fa-suitcase-rolling fs-1 text-muted mb-3"></i>
+            <h5>{% if IS_KHMER %}លោកអ្នកមិនទាន់មានការកក់ដំណើរកម្សាន្តនៅឡើយទេ{% else %}You have not booked any tours yet{% endif %}</h5>
+            <p class="text-muted">{% if IS_KHMER %}ស្វែងរកកញ្ចប់ដំណើរកម្សាន្តដ៏ល្អបំផុតរបស់យើង និងចាប់ផ្តើមដំណើរកម្សាន្តថ្មី។{% else %}Browse our curated vacation packages and embark on your next adventure.{% endif %}</p>
+            <a href="{% url 'packages_list' %}" class="btn btn-primary-custom rounded-pill">
+              {{ "Explore Packages"|t }}
+            </a>
+          </div>
+        {% endif %}
+      </div>
+
+      <!-- TAB 2: PROFILE SETTINGS -->
+      <div class="tab-pane fade" id="profile-tab-pane" role="tabpanel" aria-labelledby="profile-tab" tabindex="0">
+        <form method="POST" enctype="multipart/form-data">
+          {% csrf_token %}
+          <h5 class="fw-bold mb-3 border-bottom pb-2">{{ "My Profile"|t }}</h5>
+          
+          <div class="row g-3 mb-4">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "First Name"|t }}</label>
+              <input type="text" name="first_name" class="form-control" value="{{ user.first_name }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Last Name"|t }}</label>
+              <input type="text" name="last_name" class="form-control" value="{{ user.last_name }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Email Address"|t }}</label>
+              <input type="email" name="email" class="form-control" value="{{ user.email }}">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Phone Number"|t }}</label>
+              <input type="text" name="phone" class="form-control" value="{{ profile.phone|default:'' }}" placeholder="+1 (555) 000-0000">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "City"|t }}</label>
+              <input type="text" name="city" class="form-control" value="{{ profile.city|default:'' }}" placeholder="Phnom Penh">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Country"|t }}</label>
+              <input type="text" name="country" class="form-control" value="{{ profile.country|default:'' }}" placeholder="Cambodia">
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold text-muted">{{ "Address"|t }}</label>
+              <input type="text" name="address" class="form-control" value="{{ profile.address|default:'' }}" placeholder="123 Street Ave">
+            </div>
+            <div class="col-12">
+              <label class="form-label small fw-bold text-muted">{{ "Profile Picture"|t }}</label>
+              <input type="file" name="profile_pic" class="form-control" accept="image/*">
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom rounded-pill px-5">
+            <i class="fa-solid fa-save me-1"></i> {{ "Save Changes"|t }}
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,147 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Booking Confirmation"|t }} #{{ booking.booking_number }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+  <div class="row justify-content-center">
+    <div class="col-lg-8">
+      <!-- Success Banner -->
+      <div class="text-center mb-4 no-print">
+        <div class="rounded-circle bg-success text-white d-inline-flex align-items-center justify-content-center mb-3 shadow" style="width: 72px; height: 72px; font-size: 2rem;">
+          <i class="fa-solid fa-check"></i>
+        </div>
+        <h2 class="fw-bold">{% if IS_KHMER %}ការកក់របស់អ្នកត្រូវបានបញ្ជាក់ជោគជ័យ!{% else %}Your Booking is Confirmed!{% endif %}</h2>
+        <p class="text-muted">{% if IS_KHMER %}ប័ណ្ណបញ្ជាក់ការកក់ និងបង្កាន់ដៃត្រូវបានផ្ញើទៅកាន់ <strong>{{ booking.contact_email }}</strong>។{% else %}A confirmation voucher and receipt have been dispatched to <strong>{{ booking.contact_email }}</strong>.{% endif %}</p>
+        
+        <div class="d-flex justify-content-center gap-3 mt-3">
+          <button onclick="window.print()" class="btn btn-outline-dark rounded-pill px-4">
+            <i class="fa-solid fa-print me-1"></i> {{ "Print Voucher"|t }}
+          </button>
+          <a href="{% url 'customer_dashboard' %}" class="btn btn-primary-custom rounded-pill px-4">
+            <i class="fa-solid fa-gauge me-1"></i> {{ "Customer Dashboard"|t }}
+          </a>
+        </div>
+      </div>
+
+      <!-- Printable Travel Voucher Card -->
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm print-area">
+        <!-- Voucher Header -->
+        <div class="d-flex justify-content-between align-items-start border-bottom pb-4 mb-4">
+          <div>
+            <div class="d-flex align-items-center gap-2 mb-1">
+              <i class="fa-solid fa-earth-americas text-primary fs-3"></i>
+              <span class="fs-4 fw-bold">Wander<span class="brand-gradient">lust</span></span>
+            </div>
+            <div class="small text-muted">{% if IS_KHMER %}ប័ណ្ណបញ្ជាក់ការធ្វើដំណើរផ្លូវការ (Official Travel Voucher){% else %}Official Tour Confirmation & Travel Voucher{% endif %}</div>
+          </div>
+          <div class="text-end">
+            <span class="badge bg-success px-3 py-2 fs-6 rounded-pill">
+              <i class="fa-solid fa-circle-check me-1"></i> {{ booking.status|t }}
+            </span>
+            <div class="small text-muted mt-1">{% if IS_KHMER %}កក់នៅ{% else %}Booked on{% endif %} {{ booking.created_at|date:"M d, Y" }}</div>
+          </div>
+        </div>
+
+        <!-- Booking Details Grid -->
+        <div class="row g-4 mb-4">
+          <div class="col-sm-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="text-muted smaller text-uppercase fw-bold">{{ "Booking Number"|t }}</div>
+              <div class="fs-5 fw-bold text-primary font-monospace">{{ booking.booking_number }}</div>
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <div class="p-3 bg-light rounded-3 border">
+              <div class="text-muted smaller text-uppercase fw-bold">{{ "Travel Date"|t }}</div>
+              <div class="fs-5 fw-bold text-dark">{{ booking.travel_date|date:"l, F d, Y" }}</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tour Package Information -->
+        <div class="border rounded-3 p-4 mb-4">
+          <h5 class="fw-bold mb-3 text-dark">{{ booking.package.title }}</h5>
+          <div class="row g-3 small text-secondary">
+            <div class="col-md-4">
+              <strong>{{ "Destinations"|t }}:</strong><br>
+              {{ booking.package.destination.name }}, {{ booking.package.destination.country }}
+            </div>
+            <div class="col-md-4">
+              <strong>{{ "Duration"|t }}:</strong><br>
+              {{ booking.package.duration_days }} {{ "Days"|t }} / {{ booking.package.duration_nights }} {{ "Nights"|t }}
+            </div>
+            <div class="col-md-4">
+              <strong>{{ "Categories"|t }}:</strong><br>
+              {{ booking.package.get_category_display|t }}
+            </div>
+          </div>
+        </div>
+
+        <!-- Traveler Information -->
+        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">{{ "Contact Information"|t }}</h6>
+        <div class="row g-3 small mb-4">
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Full Name"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.contact_name }}</div>
+          </div>
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Email Address"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.contact_email }}</div>
+          </div>
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Phone Number"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.contact_phone }}</div>
+          </div>
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Number of Travelers"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.travelers_count }} {{ "Person"|t }}</div>
+          </div>
+          {% if booking.special_requests %}
+            <div class="col-md-8">
+              <span class="text-muted">{{ "Special Requests or Notes"|t }}:</span>
+              <div class="text-dark">{{ booking.special_requests }}</div>
+            </div>
+          {% endif %}
+        </div>
+
+        <!-- Payment Breakdown -->
+        <h6 class="fw-bold text-dark border-bottom pb-2 mb-3">{{ "Order Summary"|t }}</h6>
+        <table class="table table-sm table-borderless small mb-4">
+          <tbody>
+            <tr>
+              <td>{{ "Unit Price"|t }} (x{{ booking.travelers_count }} {{ "Person"|t }})</td>
+              <td class="text-end fw-semibold">${{ booking.total_price }}</td>
+            </tr>
+            <tr>
+              <td>{% if IS_KHMER %}ពន្ធ និងសេវា{% else %}Taxes & Fees{% endif %}</td>
+              <td class="text-end text-success fw-semibold">$0.00 ({% if IS_KHMER %}បានរួមបញ្ចូល{% else %}Included{% endif %})</td>
+            </tr>
+            <tr class="border-top">
+              <td class="fw-bold fs-6">{{ "Total Price"|t }}</td>
+              <td class="text-end fw-bold fs-6 text-primary">${{ booking.total_price }}</td>
+            </tr>
+            {% if payment %}
+              <tr>
+                <td class="text-muted smaller">{{ "Payment Method"|t }}: {{ payment.get_payment_method_display|t }}</td>
+                <td class="text-end text-muted smaller font-monospace">{{ "Transaction ID"|t }}: {{ payment.transaction_id }}</td>
+              </tr>
+            {% endif %}
+          </tbody>
+        </table>
+
+        <!-- Instructions -->
+        <div class="p-3 bg-light rounded-3 border small text-muted">
+          <strong>{% if IS_KHMER %}ការណែនាំសំខាន់ៗ:{% else %}Important Instructions:{% endif %}</strong>
+          <ul class="mb-0 mt-1 ps-3">
+            <li>{% if IS_KHMER %}សូមបង្ហាញប័ណ្ណអេឡិចត្រូនិចនេះ ឬប័ណ្ណដែលបានបោះពុម្ពនៅពេល check-in សណ្ឋាគារ និងជូនមគ្គុទ្ទេសក៍ទេសចរណ៍របស់អ្នក។{% else %}Please present this digital voucher or printed copy at hotel check-in and to your local tour guide.{% endif %}</li>
+            <li>{% if IS_KHMER %}ទូរស័ព្ទជំនួយបន្ទាន់ ២៤/៧: <strong>+1 (800) 456-7890</strong> ឬជំនួយតាម WhatsApp។{% else %}Emergency 24/7 hotline: <strong>+1 (800) 456-7890</strong> or WhatsApp assistance available.{% endif %}</li>
+            <li>{% if IS_KHMER %}ការបោះបង់ ឬប្តូរកាលបរិច្ឆេទដោយឥតគិតថ្លៃអាចធ្វើទៅបានរហូតដល់ ៧ ថ្ងៃមុនថ្ងៃចេញដំណើរ។{% else %}Free cancellation or date rescheduling is permitted up to 7 days prior to travel departure.{% endif %}</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

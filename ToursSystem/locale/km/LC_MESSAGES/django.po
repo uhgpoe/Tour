@@ -1,0 +1,686 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: ToursSystem 1.0\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2026-10-19 22:00+0700\n"
+"PO-Revision-Date: 2026-10-19 22:00+0700\n"
+"Last-Translator: ToursSystem Team\n"
+"Language-Team: Khmer\n"
+"Language: km\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=1; plural=0;\n"
+
+msgid "Home"
+msgstr "ទំព័រដើម"
+
+msgid "Destinations"
+msgstr "គោលដៅទេសចរណ៍"
+
+msgid "Tour Packages"
+msgstr "កញ្ចប់ទេសចរណ៍"
+
+msgid "About Us"
+msgstr "អំពីយើង"
+
+msgid "Contact"
+msgstr "ទំនាក់ទំនង"
+
+msgid "Contact Us"
+msgstr "ទំនាក់ទំនងមកយើង"
+
+msgid "Sign In"
+msgstr "ចូលគណនី"
+
+msgid "Join Free"
+msgstr "ចុះឈ្មោះឥតគិតថ្លៃ"
+
+msgid "Sign Out"
+msgstr "ចាកចេញ"
+
+msgid "Admin Portal"
+msgstr "ផ្ទាំងគ្រប់គ្រងរដ្ឋបាល"
+
+msgid "My Bookings & Profile"
+msgstr "ការកក់ និងប្រវត្តិរូប"
+
+msgid "Management Dashboard"
+msgstr "ផ្ទាំងគ្រប់គ្រងទូទៅ"
+
+msgid "Django Native Admin"
+msgstr "Django Admin"
+
+msgid "Search"
+msgstr "ស្វែងរក"
+
+msgid "Signed in as"
+msgstr "បានចូលគណនីជា"
+
+msgid "Discover The World's Most Extraordinary Journeys"
+msgstr "ស្វែងរកដំណើរកម្សាន្តដ៏អស្ចារ្យបំផុតលើពិភពលោក"
+
+msgid "Handcrafted travel packages, unforgettable expeditions, and seamless luxury bookings tailored for you."
+msgstr "កញ្ចប់ដំណើរកម្សាន្តដ៏ប្រណិត បទពិសោធន៍ដែលមិនអាចបំភ្លេចបាន និងការកក់ដ៏រហ័សទាន់ចិត្តសម្រាប់អ្នក។"
+
+msgid "Explore Packages"
+msgstr "មើលកញ្ចប់ទេសចរណ៍"
+
+msgid "All Categories"
+msgstr "ប្រភេទទាំងអស់"
+
+msgid "All Destinations"
+msgstr "គោលដៅទាំងអស់"
+
+msgid "Duration"
+msgstr "រយៈពេល"
+
+msgid "Max Price"
+msgstr "តម្លៃអតិបរមា"
+
+msgid "Find your dream tour"
+msgstr "ស្វែងរកដំណើរកម្សាន្តក្នុងក្តីស្រមៃរបស់អ្នក"
+
+msgid "Featured Destinations"
+msgstr "គោលដៅទេសចរណ៍ល្បីៗ"
+
+msgid "Hand-picked tourist spots for your next adventure"
+msgstr "ទីតាំងទេសចរណ៍ដែលពេញនិយមបំផុតសម្រាប់ការធ្វើដំណើររបស់អ្នក"
+
+msgid "View All Destinations"
+msgstr "មើលគោលដៅទាំងអស់"
+
+msgid "Trending Tour Packages"
+msgstr "កញ្ចប់ទេសចរណ៍ពេញនិយម"
+
+msgid "Browse our highest rated and bestselling itineraries"
+msgstr "មើលកញ្ចប់ទេសចរណ៍ដែលទទួលបានការពេញចិត្តខ្ពស់បំផុត"
+
+msgid "View Details"
+msgstr "មើលព័ត៌មានលម្អិត"
+
+msgid "Book Now"
+msgstr "កក់ឥឡូវនេះ"
+
+msgid "Book This Tour"
+msgstr "កក់ដំណើរកម្សាន្តនេះ"
+
+msgid "Per Person"
+msgstr "ក្នុងម្នាក់"
+
+msgid "per person"
+msgstr "ក្នុងម្នាក់"
+
+msgid "/ person"
+msgstr "/ ម្នាក់"
+
+msgid "Days"
+msgstr "ថ្ងៃ"
+
+msgid "Nights"
+msgstr "យប់"
+
+msgid "Day"
+msgstr "ថ្ងៃ"
+
+msgid "Night"
+msgstr "យប់"
+
+msgid "Rating"
+msgstr "ការវាយតម្លៃ"
+
+msgid "Reviews"
+msgstr "ការវាយតម្លៃ"
+
+msgid "reviews"
+msgstr "ការវាយតម្លៃ"
+
+msgid "Global Destinations"
+msgstr "គោលដៅទេសចរណ៍សកល"
+
+msgid "Curated Tour Packages"
+msgstr "កញ្ចប់ទេសចរណ៍សម្រិតសម្រាំង"
+
+msgid "Happy Travelers"
+msgstr "ភ្ញៀវទេសចរពេញចិត្ត"
+
+msgid "Guest Satisfaction"
+msgstr "ការពេញចិត្តរបស់ភ្ញៀវ"
+
+msgid "Why Choose Wanderlust"
+msgstr "ហេតុអ្វីជ្រើសរើស Wanderlust"
+
+msgid "Handcrafted Experiences"
+msgstr "បទពិសោធន៍សម្រិតសម្រាំងពិសេស"
+
+msgid "Best Price Guarantee"
+msgstr "ការធានាតម្លៃសមរម្យបំផុត"
+
+msgid "24/7 Concierge Support"
+msgstr "សេវាជំនួយអតិថិជន ២៤/៧"
+
+msgid "Seamless Online Booking"
+msgstr "ការកក់ងាយស្រួលតាមអនឡាញ"
+
+msgid "What Our Travelers Say"
+msgstr "មតិយោបល់ពីភ្ញៀវទេសចរ"
+
+msgid "Verified Guest Reviews"
+msgstr "ការវាយតម្លៃពិតពីភ្ញៀវទេសចរ"
+
+msgid "Adventure & Outdoors"
+msgstr "ផ្សងព្រេង និងធម្មជាតិ"
+
+msgid "Beach & Coastal"
+msgstr "តំបន់ឆ្នេរ និងកោះ"
+
+msgid "Cultural & Heritage"
+msgstr "វប្បធម៌ និងបេតិកភណ្ឌ"
+
+msgid "Luxury & Wellness"
+msgstr "ភាពប្រណិត និងសុខុមាលភាព"
+
+msgid "Wildlife & Safari"
+msgstr "សត្វព្រៃ និងព្រៃធម្មជាតិ"
+
+msgid "Mountain & Hiking"
+msgstr "ឡើងភ្នំ និងដើរព្រៃ"
+
+msgid "City Breaks & Sightseeing"
+msgstr "ទេសចរណ៍ទីក្រុង និងទស្សនាសម្ព័ន្ធ"
+
+msgid "Adventure"
+msgstr "ផ្សងព្រេង"
+
+msgid "Beach"
+msgstr "តំបន់ឆ្នេរ"
+
+msgid "Cultural"
+msgstr "វប្បធម៌"
+
+msgid "Luxury"
+msgstr "ប្រណិត"
+
+msgid "Wildlife"
+msgstr "សត្វព្រៃ"
+
+msgid "Mountain"
+msgstr "ភ្នំ"
+
+msgid "City"
+msgstr "ទីក្រុង"
+
+msgid "Overview"
+msgstr "ទិដ្ឋភាពទូទៅ"
+
+msgid "Itinerary"
+msgstr "កាលវិភាគធ្វើដំណើរ"
+
+msgid "What's Included"
+msgstr "អ្វីដែលរួមបញ្ចូល"
+
+msgid "What's Excluded"
+msgstr "អ្វីដែលមិនរាប់បញ្ចូល"
+
+msgid "Customer Reviews"
+msgstr "មតិយោបល់អតិថិជន"
+
+msgid "Write a Review"
+msgstr "សរសេរមតិវាយតម្លៃ"
+
+msgid "Your Rating"
+msgstr "ពិន្ទុរបស់អ្នក"
+
+msgid "Your Comment"
+msgstr "មតិយោបល់របស់អ្នក"
+
+msgid "Submit Review"
+msgstr "ផ្ញើមតិវាយតម្លៃ"
+
+msgid "Group Size"
+msgstr "ទំហំក្រុម"
+
+msgid "Max Travelers"
+msgstr "ចំនួនភ្ញៀវអតិបរមា"
+
+msgid "Travel Style"
+msgstr "ទម្រង់ធ្វើដំណើរ"
+
+msgid "Best Time"
+msgstr "ពេលវេលាល្អបំផុត"
+
+msgid "Climate"
+msgstr "អាកាសធាតុ"
+
+msgid "Related Tours"
+msgstr "ដំណើរកម្សាន្តស្រដៀងគ្នា"
+
+msgid "Share This Tour"
+msgstr "ចែករំលែកដំណើរកម្សាន្តនេះ"
+
+msgid "Book Tour Package"
+msgstr "កក់កញ្ចប់ទេសចរណ៍"
+
+msgid "Booking Details"
+msgstr "ព័ត៌មានលម្អិតនៃការកក់"
+
+msgid "Travel Date"
+msgstr "ថ្ងៃធ្វើដំណើរ"
+
+msgid "Number of Travelers"
+msgstr "ចំនួនភ្ញៀវធ្វើដំណើរ"
+
+msgid "Contact Information"
+msgstr "ព័ត៌មានទំនាក់ទំនង"
+
+msgid "Full Name"
+msgstr "ឈ្មោះពេញ"
+
+msgid "Email Address"
+msgstr "អាសយដ្ឋានអ៊ីមែល"
+
+msgid "Phone Number"
+msgstr "លេខទូរស័ព្ទ"
+
+msgid "Special Requests or Notes"
+msgstr "សំណើពិសេស ឬចំណាំបន្ថែម"
+
+msgid "Proceed to Payment"
+msgstr "បន្តទៅការទូទាត់ប្រាក់"
+
+msgid "Order Summary"
+msgstr "សង្ខេបការបញ្ជាទិញ"
+
+msgid "Unit Price"
+msgstr "តម្លៃក្នុងម្នាក់"
+
+msgid "Total Amount"
+msgstr "ចំនួនទឹកប្រាក់សរុប"
+
+msgid "Total Price"
+msgstr "តម្លៃសរុប"
+
+msgid "Subtotal"
+msgstr "សរុបរង"
+
+msgid "Payment Checkout"
+msgstr "ការទូទាត់ប្រាក់"
+
+msgid "Select Payment Method"
+msgstr "ជ្រើសរើសវិធីសាស្ត្រទូទាត់"
+
+msgid "Credit / Debit Card"
+msgstr "កាតឥណទាន / ឥណពន្ធ"
+
+msgid "Credit Card"
+msgstr "កាតឥណទាន"
+
+msgid "PayPal"
+msgstr "PayPal"
+
+msgid "Direct Bank Transfer"
+msgstr "ផ្ទេរប្រាក់តាមធនាគារ"
+
+msgid "Cash on Arrival"
+msgstr "ទូទាត់ជាសាច់ប្រាក់ពេលមកដល់"
+
+msgid "Card Number"
+msgstr "លេខកាត"
+
+msgid "Cardholder Name"
+msgstr "ឈ្មោះម្ចាស់កាត"
+
+msgid "Expiry Date"
+msgstr "កាលបរិច្ឆេទផុតកំណត់"
+
+msgid "CVV / CVC"
+msgstr "CVV / CVC"
+
+msgid "Pay Now"
+msgstr "ទូទាត់ប្រាក់ឥឡូវនេះ"
+
+msgid "Booking Confirmation"
+msgstr "ការបញ្ជាក់ការកក់"
+
+msgid "Booking Successful"
+msgstr "ការកក់ទទួលបានជោគជ័យ"
+
+msgid "Booking Number"
+msgstr "លេខកូដការកក់"
+
+msgid "Status"
+msgstr "ស្ថានភាព"
+
+msgid "Payment Status"
+msgstr "ស្ថានភាពទូទាត់"
+
+msgid "Transaction ID"
+msgstr "លេខកូដប្រតិបត្តិការ"
+
+msgid "Print Voucher"
+msgstr "បោះពុម្ពប័ណ្ណកក់"
+
+msgid "Return to Dashboard"
+msgstr "ត្រឡប់ទៅផ្ទាំងព័ត៌មាន"
+
+msgid "Back to Home"
+msgstr "ត្រឡប់ទៅទំព័រដើម"
+
+msgid "Pending"
+msgstr "កំពុងរង់ចាំ"
+
+msgid "Confirmed"
+msgstr "បានបញ្ជាក់"
+
+msgid "Cancelled"
+msgstr "បានបោះបង់"
+
+msgid "Completed"
+msgstr "បានបញ្ចប់"
+
+msgid "Failed"
+msgstr "បរាជ័យ"
+
+msgid "Refunded"
+msgstr "បានសងប្រាក់វិញ"
+
+msgid "Pending Confirmation"
+msgstr "រង់ចាំការបញ្ជាក់"
+
+msgid "Customer Dashboard"
+msgstr "ផ្ទាំងព័ត៌មានអតិថិជន"
+
+msgid "My Profile"
+msgstr "ប្រវត្តិរូបរបស់ខ្ញុំ"
+
+msgid "Booking History"
+msgstr "ប្រវត្តិនៃការកក់"
+
+msgid "Total Spent"
+msgstr "ទឹកប្រាក់ចំណាយសរុប"
+
+msgid "Completed Trips"
+msgstr "ដំណើរកម្សាន្តដែលបានបញ្ចប់"
+
+msgid "Active Bookings"
+msgstr "ការកក់សកម្ម"
+
+msgid "Update Profile"
+msgstr "កែប្រែប្រវត្តិរូប"
+
+msgid "First Name"
+msgstr "នាមខ្លួន"
+
+msgid "Last Name"
+msgstr "នាមត្រកូល"
+
+msgid "Address"
+msgstr "អាសយដ្ឋាន"
+
+msgid "Country"
+msgstr "ប្រទេស"
+
+msgid "Profile Picture"
+msgstr "រូបថតប្រវត្តិរូប"
+
+msgid "Save Changes"
+msgstr "រក្សាទុកការផ្លាស់ប្តូរ"
+
+msgid "Cancel Booking"
+msgstr "បោះបង់ការកក់"
+
+msgid "Action"
+msgstr "សកម្មភាព"
+
+msgid "Actions"
+msgstr "សកម្មភាព"
+
+msgid "View"
+msgstr "មើល"
+
+msgid "Pay"
+msgstr "ទូទាត់"
+
+msgid "Filter Packages"
+msgstr "ចម្រាញ់កញ្ចប់ទេសចរណ៍"
+
+msgid "Sort By"
+msgstr "តម្រៀបតាម"
+
+msgid "Popular"
+msgstr "ពេញនិយម"
+
+msgid "Price: Low to High"
+msgstr "តម្លៃ: ទាបទៅខ្ពស់"
+
+msgid "Price: High to Low"
+msgstr "តម្លៃ: ខ្ពស់ទៅទាប"
+
+msgid "Duration: Short to Long"
+msgstr "រយៈពេល: ខ្លីទៅវែង"
+
+msgid "Newest First"
+msgstr "ថ្មីបំផុតមុន"
+
+msgid "Apply Filters"
+msgstr "អនុវត្តតម្រង"
+
+msgid "Clear All"
+msgstr "សម្អាតទាំងអស់"
+
+msgid "Showing"
+msgstr "កំពុងបង្ហាញ"
+
+msgid "packages found"
+msgstr "កញ្ចប់ទេសចរណ៍ត្រូវបានរកឃើញ"
+
+msgid "No tour packages found"
+msgstr "មិនមានកញ្ចប់ទេសចរណ៍ដែលត្រូវគ្នានោះទេ"
+
+msgid "Explore Destinations"
+msgstr "រុករកគោលដៅទេសចរណ៍"
+
+msgid "Find your perfect getaway among world-class destinations"
+msgstr "ស្វែងរកដំណើរកម្សាន្តដ៏ល្អឥតខ្ចោះក្នុងចំណោមគោលដៅលំដាប់ពិភពលោក"
+
+msgid "Search destination or country"
+msgstr "ស្វែងរកគោលដៅ ឬប្រទេស"
+
+msgid "packages available"
+msgstr "កញ្ចប់ទេសចរណ៍មានផ្តល់ជូន"
+
+msgid "package available"
+msgstr "កញ្ចប់ទេសចរណ៍មានផ្តល់ជូន"
+
+msgid "Explore Tours"
+msgstr "មើលដំណើរកម្សាន្ត"
+
+msgid "Get in Touch"
+msgstr "ទំនាក់ទំនងមកកាន់យើង"
+
+msgid "We'd love to hear from you. Send our travel concierge team a message."
+msgstr "យើងរីករាយក្នុងការផ្តល់ព័ត៌មានជូនលោកអ្នក។ សូមផ្ញើសារមកកាន់ក្រុមការងាររបស់យើង។"
+
+msgid "Send Message"
+msgstr "ផ្ញើសារ"
+
+msgid "Subject"
+msgstr "ប្រធានបទ"
+
+msgid "Message"
+msgstr "ខ្លឹមសារសារ"
+
+msgid "Our Office"
+msgstr "ការិយាល័យរបស់យើង"
+
+msgid "Phone"
+msgstr "ទូរស័ព្ទ"
+
+msgid "Email"
+msgstr "អ៊ីមែល"
+
+msgid "Working Hours"
+msgstr "ម៉ោងធ្វើការ"
+
+msgid "Mon - Sat: 8:00 AM - 6:00 PM"
+msgstr "ចន្ទ - សៅរ៍: ៨:០០ ព្រឹក - ៦:០០ ល្ងាច"
+
+msgid "Sunday: Closed"
+msgstr "អាទិត្យ: សម្រាក"
+
+msgid "About Wanderlust Journeys"
+msgstr "អំពី Wanderlust Journeys"
+
+msgid "Manager Portal"
+msgstr "ផ្ទាំងគ្រប់គ្រងរដ្ឋបាល"
+
+msgid "Dashboard"
+msgstr "ផ្ទាំងព័ត៌មាន"
+
+msgid "Bookings"
+msgstr "ការកក់"
+
+msgid "Payments"
+msgstr "ការទូទាត់ប្រាក់"
+
+msgid "Customers"
+msgstr "អតិថិជន"
+
+msgid "Inquiries"
+msgstr "សារសាកសួរ"
+
+msgid "Visit Public Site"
+msgstr "មើលគេហទំព័រ"
+
+msgid "Administrator"
+msgstr "អ្នកគ្រប់គ្រង"
+
+msgid "Add New"
+msgstr "បន្ថែមថ្មី"
+
+msgid "Add New Destination"
+msgstr "បន្ថែមគោលដៅថ្មី"
+
+msgid "Add New Tour Package"
+msgstr "បន្ថែមកញ្ចប់ទេសចរណ៍ថ្មី"
+
+msgid "Edit"
+msgstr "កែប្រែ"
+
+msgid "Delete"
+msgstr "លុប"
+
+msgid "Total Bookings"
+msgstr "ការកក់សរុប"
+
+msgid "Active Packages"
+msgstr "កញ្ចប់ទេសចរណ៍សកម្ម"
+
+msgid "Total Customers"
+msgstr "អតិថិជនសរុប"
+
+msgid "Recent Bookings"
+msgstr "ការកក់ថ្មីៗ"
+
+msgid "Recent Inquiries"
+msgstr "សារសាកសួរថ្មីៗ"
+
+msgid "Recent Messages"
+msgstr "សារថ្មីៗ"
+
+msgid "Manage Destinations"
+msgstr "គ្រប់គ្រងគោលដៅទេសចរណ៍"
+
+msgid "Manage Tour Packages"
+msgstr "គ្រប់គ្រងកញ្ចប់ទេសចរណ៍"
+
+msgid "Manage Bookings"
+msgstr "គ្រប់គ្រងការកក់"
+
+msgid "Manage Payments"
+msgstr "គ្រប់គ្រងការទូទាត់"
+
+msgid "Manage Customers"
+msgstr "គ្រប់គ្រងអតិថិជន"
+
+msgid "Manage Messages"
+msgstr "គ្រប់គ្រងសារ"
+
+msgid "Booking Overview"
+msgstr "ទិដ្ឋភាពទូទៅនៃការកក់"
+
+msgid "Revenue by Category"
+msgstr "ចំណូលតាមប្រភេទទេសចរណ៍"
+
+msgid "Quick Actions"
+msgstr "សកម្មភាពរហ័ស"
+
+msgid "Add Destination"
+msgstr "បន្ថែមគោលដៅ"
+
+msgid "Add Package"
+msgstr "បន្ថែមកញ្ចប់"
+
+msgid "View Bookings"
+msgstr "មើលការកក់"
+
+msgid "View Payments"
+msgstr "មើលការទូទាត់"
+
+msgid "Customer"
+msgstr "អតិថិជន"
+
+msgid "Package"
+msgstr "កញ្ចប់ទេសចរណ៍"
+
+msgid "Amount"
+msgstr "ចំនួនប្រាក់"
+
+msgid "Date"
+msgstr "កាលបរិច្ឆេទ"
+
+msgid "Method"
+msgstr "វិធីសាស្ត្រ"
+
+msgid "Mark as Read"
+msgstr "សម្គាល់ថាបានអាន"
+
+msgid "Mark as Unread"
+msgstr "សម្គាល់ថាមិនទាន់អាន"
+
+msgid "Quick Links"
+msgstr "តំណភ្ជាប់រហ័ស"
+
+msgid "Stay Connected"
+msgstr "ភ្ជាប់ទំនាក់ទំនង"
+
+msgid "Subscribe to get seasonal private travel deals and secret discounts directly to your inbox."
+msgstr "ជាវដើម្បីទទួលបានការបញ្ចុះតម្លៃពិសេស និងការផ្តល់ជូនថ្មីៗពីយើង។"
+
+msgid "Enter your email"
+msgstr "បញ្ចូលអ៊ីមែលរបស់អ្នក"
+
+msgid "24/7 Concierge"
+msgstr "សេវាជំនួយ ២៤/៧"
+
+msgid "Privacy Policy"
+msgstr "គោលការណ៍ឯកជនភាព"
+
+msgid "Terms of Service"
+msgstr "លក្ខខណ្ឌប្រើប្រាស់"
+
+msgid "Security"
+msgstr "សុវត្ថិភាព"
+
+msgid "All rights reserved."
+msgstr "រក្សាសិទ្ធិគ្រប់យ៉ាង។"
+
+msgid "Language"
+msgstr "ភាសា"
+
+msgid "English"
+msgstr "English"
+
+msgid "Khmer"
+msgstr "ភាសាខ្មែរ"
+

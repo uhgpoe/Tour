@@ -1,0 +1,65 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block title %}Contact Inquiries | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+  <div>
+    <h3 class="fw-bold text-dark mb-1">Inquiries & Feedback</h3>
+    <div class="text-muted small">Messages received through the public contact and inquiry forms.</div>
+  </div>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4">
+  <div class="table-responsive">
+    <table class="table table-hover align-middle">
+      <thead class="table-light small text-uppercase">
+        <tr>
+          <th>Sender Name</th>
+          <th>Email & Phone</th>
+          <th>Subject</th>
+          <th>Message</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th class="text-end">Action</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for msg in contact_messages %}
+          <tr class="{% if not msg.is_read %}table-light{% endif %}">
+            <td>
+              <div class="fw-bold text-dark">{{ msg.name }}</div>
+            </td>
+            <td>
+              <div>{{ msg.email }}</div>
+              <div class="small text-muted">{{ msg.phone|default:'-' }}</div>
+            </td>
+            <td>
+              <span class="fw-semibold">{{ msg.subject }}</span>
+            </td>
+            <td style="max-width: 320px;">
+              <span class="small text-muted text-break">{{ msg.message }}</span>
+            </td>
+            <td class="small text-nowrap">{{ msg.created_at|date:"M d, Y H:i" }}</td>
+            <td>
+              {% if msg.is_read %}
+                <span class="badge bg-secondary rounded-pill">Read</span>
+              {% else %}
+                <span class="badge bg-primary rounded-pill">New</span>
+              {% endif %}
+            </td>
+            <td class="text-end text-nowrap">
+              <a href="{% url 'admin_message_toggle_read' msg.pk %}" class="btn btn-sm {% if msg.is_read %}btn-outline-secondary{% else %}btn-outline-primary{% endif %}" title="Toggle Read Status">
+                <i class="fa-solid {% if msg.is_read %}fa-envelope{% else %}fa-envelope-open{% endif %}"></i>
+              </a>
+            </td>
+          </tr>
+        {% empty %}
+          <tr><td colspan="7" class="text-center py-4 text-muted">No messages received yet.</td></tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+{% endblock %}

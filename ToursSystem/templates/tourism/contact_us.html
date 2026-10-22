@@ -1,0 +1,153 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Contact Us"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- Contact Hero -->
+<div class="py-5 bg-dark text-white text-center position-relative" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1537996194471-e657df975ab4?auto=format&fit=crop&w=1920&q=80') center/cover;">
+  <div class="container py-4">
+    <h1 class="display-4 fw-bold mb-3">
+      {% if IS_KHMER %}យើងរីករាយក្នុងការជួយរៀបចំដំណើរកម្សាន្តរបស់អ្នក{% else %}We’re Here To Help You Plan{% endif %}
+    </h1>
+    <p class="lead text-white-50 mx-auto" style="max-width: 650px;">
+      {{ "We'd love to hear from you. Send our travel concierge team a message."|t }}
+    </p>
+  </div>
+</div>
+
+<div class="container py-5 my-3">
+  <div class="row g-5">
+    <!-- LEFT: CONTACT INFO & CARDS -->
+    <div class="col-lg-5">
+      <h3 class="fw-bold mb-4">{{ "Get In Touch"|t }}</h3>
+      <p class="text-secondary mb-4">
+        {% if IS_KHMER %}
+          ក្រុមការងារបម្រើសេវាកម្មអតិថិជនរបស់យើងបំពេញការងារ ២៤ ម៉ោងក្នុងមួយថ្ងៃ ៧ ថ្ងៃក្នុងមួយសប្តាហ៍ ដើម្បីជួយសម្រួលដល់ភ្ញៀវទេសចរទាំងអស់។
+        {% else %}
+          Our travel concierge team operates 24 hours a day, 7 days a week across all major time zones to assist travelers worldwide.
+        {% endif %}
+      </p>
+
+      <div class="vstack gap-3 mb-5">
+        <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 border shadow-sm">
+          <div class="feature-icon-box m-0 bg-primary-light text-primary">
+            <i class="fa-solid fa-headset"></i>
+          </div>
+          <div>
+            <div class="text-muted small">{{ "24/7 Concierge Support"|t }}</div>
+            <div class="fw-bold text-dark">+1 (800) 456-7890 / +1 (415) 890-1234</div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 border shadow-sm">
+          <div class="feature-icon-box m-0 bg-primary-light text-primary">
+            <i class="fa-solid fa-envelope"></i>
+          </div>
+          <div>
+            <div class="text-muted small">{{ "Email Address"|t }}</div>
+            <div class="fw-bold text-dark">support@wanderlustjourneys.com</div>
+          </div>
+        </div>
+
+        <div class="d-flex align-items-center gap-3 p-3 bg-white rounded-3 border shadow-sm">
+          <div class="feature-icon-box m-0 bg-primary-light text-primary">
+            <i class="fa-solid fa-location-dot"></i>
+          </div>
+          <div>
+            <div class="text-muted small">{{ "Our Office"|t }}</div>
+            <div class="fw-bold text-dark">450 Mission Street, Suite 1200, San Francisco, CA</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FAQ Section -->
+      <h5 class="fw-bold mb-3">{% if IS_KHMER %}សំណួរដែលសួរញឹកញាប់ (FAQ){% else %}Frequently Asked Questions{% endif %}</h5>
+      <div class="accordion" id="contactFaq">
+        <div class="accordion-item border-0 mb-2 shadow-sm rounded-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed fw-semibold small bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#faq1">
+              {% if IS_KHMER %}តើដំណើរការនៃការបញ្ជាក់ការកក់ប្រព្រឹត្តទៅយ៉ាងដូចម្តេច?{% else %}How does the booking confirmation work?{% endif %}
+            </button>
+          </h2>
+          <div id="faq1" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+            <div class="accordion-body small text-muted bg-white">
+              {% if IS_KHMER %}
+                បន្ទាប់ពីការកក់ និងការទូទាត់ប្រាក់បានជោគជ័យ ប័ណ្ណធ្វើដំណើរផ្លូវការរបស់អ្នកនឹងត្រូវបានចេញភ្លាមៗ ហើយអាចទាញយកបានពីផ្ទាំងព័ត៌មានអតិថិជនរបស់អ្នក។
+              {% else %}
+                Upon successful reservation and payment, your official travel voucher is immediately issued and downloadable from your customer dashboard.
+              {% endif %}
+            </div>
+          </div>
+        </div>
+
+        <div class="accordion-item border-0 mb-2 shadow-sm rounded-3 overflow-hidden">
+          <h2 class="accordion-header">
+            <button class="accordion-button collapsed fw-semibold small bg-light" type="button" data-bs-toggle="collapse" data-bs-target="#faq2">
+              {% if IS_KHMER %}តើគោលការណ៍នៃការបោះបង់ការកក់មានដូចម្តេចខ្លះ?{% else %}What is your cancellation policy?{% endif %}
+            </button>
+          </h2>
+          <div id="faq2" class="accordion-collapse collapse" data-bs-parent="#contactFaq">
+            <div class="accordion-body small text-muted bg-white">
+              {% if IS_KHMER %}
+                អ្នកអាចបោះបង់ ឬប្តូរកាលបរិច្ឆេទដោយឥតគិតថ្លៃរហូតដល់ ៧ ថ្ងៃមុនថ្ងៃចេញដំណើរ។ ការបោះបង់ក្នុងរង្វង់ ៧ ថ្ងៃ គឺអាស្រ័យលើគោលការណ៍សណ្ឋាគារ។
+              {% else %}
+                You can cancel or reschedule without any fee up to 7 days before departure. Cancellations within 7 days are subject to hotel policy.
+              {% endif %}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT: CONTACT FORM -->
+    <div class="col-lg-7">
+      <div class="bg-white p-4 p-md-5 rounded-4 border shadow-sm">
+        <h4 class="fw-bold mb-2">{{ "Send Message"|t }}</h4>
+        <p class="text-muted small mb-4">
+          {% if IS_KHMER %}ជាទូទៅយើងឆ្លើយតបក្នុងរយៈពេលពី ២ ទៅ ៤ ម៉ោងធ្វើការ។{% else %}We usually respond within 2 to 4 business hours.{% endif %}
+        </p>
+
+        <form method="POST">
+          {% csrf_token %}
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Full Name"|t }} *</label>
+              {{ form.name }}
+              {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors }}</div>{% endif %}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Email Address"|t }} *</label>
+              {{ form.email }}
+              {% if form.email.errors %}<div class="text-danger small">{{ form.email.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="row g-3 mb-3">
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Phone Number"|t }}</label>
+              {{ form.phone }}
+            </div>
+            <div class="col-md-6">
+              <label class="form-label small fw-bold text-muted">{{ "Subject"|t }} *</label>
+              {{ form.subject }}
+              {% if form.subject.errors %}<div class="text-danger small">{{ form.subject.errors }}</div>{% endif %}
+            </div>
+          </div>
+
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-muted">{{ "Message"|t }} *</label>
+            {{ form.message }}
+            {% if form.message.errors %}<div class="text-danger small">{{ form.message.errors }}</div>{% endif %}
+          </div>
+
+          <button type="submit" class="btn btn-primary-custom btn-lg rounded-pill px-5 fw-bold shadow">
+            {{ "Send Message"|t }} <i class="fa-solid fa-paper-plane ms-1"></i>
+          </button>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,214 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Tour Packages"|t }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- Page Header -->
+<div class="py-5 bg-dark text-white text-center position-relative" style="background: linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.85)), url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1920&q=80') center/cover;">
+  <div class="container py-3">
+    <h1 class="display-5 fw-bold mb-2">{{ "Curated Tour Packages"|t }}</h1>
+    <p class="lead text-white-50 mx-auto" style="max-width: 600px;">
+      {{ "Find your dream tour"|t }}
+    </p>
+  </div>
+</div>
+
+<div class="container py-5">
+  <div class="row g-4">
+    <!-- LEFT SIDEBAR: FILTERS -->
+    <div class="col-lg-3">
+      <div class="bg-white p-4 rounded-4 border shadow-sm sticky-top" style="top: 90px; z-index: 10;">
+        <div class="d-flex align-items-center justify-content-between mb-3 pb-2 border-bottom">
+          <h5 class="fw-bold mb-0"><i class="fa-solid fa-sliders text-primary me-2"></i> {{ "Filter Packages"|t }}</h5>
+          <a href="{% url 'packages_list' %}" class="small text-decoration-none text-muted">{{ "Clear All"|t }}</a>
+        </div>
+
+        <form method="GET" action="{% url 'packages_list' %}">
+          <!-- Keyword -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-uppercase text-muted">{{ "Search"|t }}</label>
+            <input type="text" name="q" value="{{ selected_query }}" class="form-control" placeholder="{% if IS_KHMER %}ស្វែងរកកញ្ចប់ទេសចរណ៍...{% else %}Search tours...{% endif %}">
+          </div>
+
+          <!-- Destination -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-uppercase text-muted">{{ "Destinations"|t }}</label>
+            <select name="destination" class="form-select">
+              <option value="">{{ "All Destinations"|t }}</option>
+              {% for d in all_destinations %}
+                <option value="{{ d.id }}" {% if selected_destination == d.id|stringformat:"s" %}selected{% endif %}>
+                  {{ d.name }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Category -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-uppercase text-muted">{{ "Categories"|t }}</label>
+            <select name="category" class="form-select">
+              <option value="">{{ "All Categories"|t }}</option>
+              {% for key, val in categories %}
+                <option value="{{ key }}" {% if selected_category == key %}selected{% endif %}>
+                  {{ val|t }}
+                </option>
+              {% endfor %}
+            </select>
+          </div>
+
+          <!-- Duration -->
+          <div class="mb-3">
+            <label class="form-label small fw-bold text-uppercase text-muted">{{ "Duration"|t }}</label>
+            <select name="duration" class="form-select">
+              <option value="">{% if IS_KHMER %}គ្រប់រយៈពេល{% else %}Any Duration{% endif %}</option>
+              <option value="1-3" {% if selected_duration == '1-3' %}selected{% endif %}>{% if IS_KHMER %}ខ្លី (១ - ៣ ថ្ងៃ){% else %}Short (1 - 3 Days){% endif %}</option>
+              <option value="4-7" {% if selected_duration == '4-7' %}selected{% endif %}>{% if IS_KHMER %}មធ្យម (៤ - ៧ ថ្ងៃ){% else %}Medium (4 - 7 Days){% endif %}</option>
+              <option value="8+" {% if selected_duration == '8+' %}selected{% endif %}>{% if IS_KHMER %}វែង (៨+ ថ្ងៃ){% else %}Long (8+ Days){% endif %}</option>
+            </select>
+          </div>
+
+          <!-- Max Price -->
+          <div class="mb-4">
+            <label class="form-label small fw-bold text-uppercase text-muted">{{ "Max Price"|t }} ($ USD)</label>
+            <input type="number" name="max_price" value="{{ selected_max_price }}" class="form-control" placeholder="e.g. 2500" step="50">
+          </div>
+
+          <!-- Submit Filter -->
+          <button type="submit" class="btn btn-primary-custom w-100 rounded-pill">
+            <i class="fa-solid fa-filter me-1"></i> {{ "Apply Filters"|t }}
+          </button>
+        </form>
+      </div>
+    </div>
+
+    <!-- RIGHT CONTENT: PACKAGES LIST & SORT -->
+    <div class="col-lg-9">
+      <!-- Top Bar: Result count & Sort Dropdown -->
+      <div class="bg-white p-3 rounded-4 border shadow-sm d-flex flex-wrap align-items-center justify-content-between gap-3 mb-4">
+        <div>
+          <span class="fw-bold text-dark">{{ packages_count }}</span> {{ "packages found"|t }}
+        </div>
+
+        <form method="GET" action="{% url 'packages_list' %}" class="d-flex align-items-center gap-2 m-0">
+          <!-- Preserve existing filters -->
+          {% if selected_query %}<input type="hidden" name="q" value="{{ selected_query }}">{% endif %}
+          {% if selected_destination %}<input type="hidden" name="destination" value="{{ selected_destination }}">{% endif %}
+          {% if selected_category %}<input type="hidden" name="category" value="{{ selected_category }}">{% endif %}
+          {% if selected_duration %}<input type="hidden" name="duration" value="{{ selected_duration }}">{% endif %}
+          {% if selected_max_price %}<input type="hidden" name="max_price" value="{{ selected_max_price }}">{% endif %}
+
+          <label class="small text-muted text-nowrap mb-0">{{ "Sort By"|t }}:</label>
+          <select name="sort" class="form-select form-select-sm" onchange="this.form.submit()" style="min-width: 170px;">
+            <option value="popular" {% if selected_sort == 'popular' %}selected{% endif %}>{{ "Popular"|t }}</option>
+            <option value="price_asc" {% if selected_sort == 'price_asc' %}selected{% endif %}>{{ "Price: Low to High"|t }}</option>
+            <option value="price_desc" {% if selected_sort == 'price_desc' %}selected{% endif %}>{{ "Price: High to Low"|t }}</option>
+            <option value="duration" {% if selected_sort == 'duration' %}selected{% endif %}>{{ "Duration: Short to Long"|t }}</option>
+            <option value="newest" {% if selected_sort == 'newest' %}selected{% endif %}>{{ "Newest First"|t }}</option>
+          </select>
+        </form>
+      </div>
+
+      <!-- Packages Grid -->
+      <div class="row g-4">
+        {% for pkg in page_obj %}
+          <div class="col-md-6 col-xl-4">
+            <div class="tour-card">
+              <div class="tour-card-img-wrapper">
+                <img src="{{ pkg.display_image }}" alt="{{ pkg.title }}" class="tour-card-img" loading="lazy">
+                <div class="badge-floating-top">
+                  <i class="fa-regular fa-clock me-1 text-warning"></i> {{ pkg.duration_days }} {{ "Days"|t }} / {{ pkg.duration_nights }} {{ "Nights"|t }}
+                </div>
+                {% if pkg.discount_percent > 0 %}
+                  <div class="badge-discount">-{{ pkg.discount_percent }}% OFF</div>
+                {% endif %}
+              </div>
+
+              <div class="p-3 d-flex flex-column flex-grow-1">
+                <div class="d-flex justify-content-between align-items-center mb-1">
+                  <span class="badge bg-light text-primary border small fw-semibold">
+                    {{ pkg.get_category_display|t }}
+                  </span>
+                  <div class="rating-stars small">
+                    <i class="fa-solid fa-star"></i> {{ pkg.average_rating }}
+                  </div>
+                </div>
+
+                <div class="small text-muted mb-1">
+                  <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ pkg.destination.name }}
+                </div>
+
+                <h6 class="fw-bold mb-2">
+                  <a href="{% url 'package_detail' pkg.slug %}" class="text-dark text-decoration-none">
+                    {{ pkg.title }}
+                  </a>
+                </h6>
+
+                <p class="text-muted small mb-3 flex-grow-1">
+                  {{ pkg.description|truncatewords:14 }}
+                </p>
+
+                <div class="d-flex align-items-center justify-content-between pt-2 border-top mt-auto">
+                  <div>
+                    <div class="text-muted smaller" style="font-size: 0.75rem;">{{ "Per Person"|t }}</div>
+                    <div class="d-flex align-items-baseline gap-1">
+                      <span class="price-tag fs-5">${{ pkg.current_price }}</span>
+                      {% if pkg.discount_price and pkg.discount_price < pkg.price %}
+                        <span class="price-old smaller">${{ pkg.price }}</span>
+                      {% endif %}
+                    </div>
+                  </div>
+
+                  <a href="{% url 'package_detail' pkg.slug %}" class="btn btn-sm btn-primary-custom px-3 py-1">
+                    {{ "View Details"|t }}
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        {% empty %}
+          <div class="col-12 text-center py-5">
+            <i class="fa-solid fa-compass fs-1 text-muted mb-3"></i>
+            <h4>{{ "No tour packages found"|t }}</h4>
+            <p class="text-muted">{% if IS_KHMER %}សូមព្យាយាមកែសម្រួលតម្រង ថវិកា ឬការស្វែងរកពាក្យគន្លឹះរបស់អ្នក។{% else %}Try adjusting your filters, budget, or keyword search.{% endif %}</p>
+            <a href="{% url 'packages_list' %}" class="btn btn-primary-custom">{{ "Clear All"|t }}</a>
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Pagination -->
+      {% if page_obj.has_other_pages %}
+        <nav class="mt-5" aria-label="Page navigation">
+          <ul class="pagination justify-content-center">
+            {% if page_obj.has_previous %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.previous_page_number }}{% if selected_query %}&q={{ selected_query }}{% endif %}{% if selected_destination %}&destination={{ selected_destination }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_duration %}&duration={{ selected_duration }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">
+                  <i class="fa-solid fa-chevron-left"></i>
+                </a>
+              </li>
+            {% endif %}
+
+            {% for num in page_obj.paginator.page_range %}
+              {% if page_obj.number == num %}
+                <li class="page-item active"><span class="page-link">{{ num }}</span></li>
+              {% elif num > page_obj.number|add:'-3' and num < page_obj.number|add:'3' %}
+                <li class="page-item">
+                  <a class="page-link" href="?page={{ num }}{% if selected_query %}&q={{ selected_query }}{% endif %}{% if selected_destination %}&destination={{ selected_destination }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_duration %}&duration={{ selected_duration }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">{{ num }}</a>
+                </li>
+              {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+              <li class="page-item">
+                <a class="page-link" href="?page={{ page_obj.next_page_number }}{% if selected_query %}&q={{ selected_query }}{% endif %}{% if selected_destination %}&destination={{ selected_destination }}{% endif %}{% if selected_category %}&category={{ selected_category }}{% endif %}{% if selected_duration %}&duration={{ selected_duration }}{% endif %}{% if selected_max_price %}&max_price={{ selected_max_price }}{% endif %}{% if selected_sort %}&sort={{ selected_sort }}{% endif %}">
+                  <i class="fa-solid fa-chevron-right"></i>
+                </a>
+              </li>
+            {% endif %}
+          </ul>
+        </nav>
+      {% endif %}
+    </div>
+  </div>
+</div>
+{% endblock %}

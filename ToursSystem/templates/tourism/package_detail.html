@@ -1,0 +1,264 @@
+{% extends 'base.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ package.title }} | Wanderlust Journeys{% endblock %}
+
+{% block content %}
+<!-- Top Breadcrumb & Title Area -->
+<div class="bg-white border-bottom py-3">
+  <div class="container">
+    <nav aria-label="breadcrumb">
+      <ol class="breadcrumb mb-2 small">
+        <li class="breadcrumb-item"><a href="{% url 'home' %}" class="text-decoration-none">{{ "Home"|t }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'packages_list' %}" class="text-decoration-none">{{ "Tour Packages"|t }}</a></li>
+        <li class="breadcrumb-item"><a href="{% url 'destination_detail' package.destination.slug %}" class="text-decoration-none">{{ package.destination.name }}</a></li>
+        <li class="breadcrumb-item active" aria-current="page">{{ package.title|truncatewords:6 }}</li>
+      </ol>
+    </nav>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-3">
+      <div>
+        <h1 class="h2 fw-bold text-dark mb-1">{{ package.title }}</h1>
+        <div class="d-flex align-items-center gap-3 text-muted small">
+          <span><i class="fa-solid fa-location-dot text-danger me-1"></i> {{ package.destination.name }}, {{ package.destination.country }}</span>
+          <span>&bull;</span>
+          <span class="rating-stars"><i class="fa-solid fa-star"></i> {{ package.average_rating }} ({{ package.reviews_count }} {{ "Reviews"|t }})</span>
+          <span>&bull;</span>
+          <span class="badge bg-light text-primary border">{{ package.get_category_display|t }}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="container py-4 my-2">
+  <div class="row g-4">
+    <!-- LEFT COLUMN: MAIN CONTENT -->
+    <div class="col-lg-8">
+      <!-- Main Featured Image -->
+      <div class="rounded-4 overflow-hidden shadow-sm mb-4" style="max-height: 480px;">
+        <img src="{{ package.display_image }}" alt="{{ package.title }}" class="w-100 h-100 object-fit-cover" style="min-height: 380px; object-fit: cover;">
+      </div>
+
+      <!-- Quick Highlights Bar -->
+      <div class="bg-white p-3 rounded-4 border shadow-sm mb-4">
+        <div class="row g-3 text-center">
+          <div class="col-3 border-end">
+            <i class="fa-regular fa-clock fs-4 text-primary mb-1"></i>
+            <div class="smaller text-muted">{{ "Duration"|t }}</div>
+            <div class="fw-bold text-dark">{{ package.duration_days }} {{ "Days"|t }} / {{ package.duration_nights }} {{ "Nights"|t }}</div>
+          </div>
+          <div class="col-3 border-end">
+            <i class="fa-solid fa-users fs-4 text-primary mb-1"></i>
+            <div class="smaller text-muted">{{ "Group Size"|t }}</div>
+            <div class="fw-bold text-dark">{{ "Max Travelers"|t }}: {{ package.max_travelers }}</div>
+          </div>
+          <div class="col-3 border-end">
+            <i class="fa-solid fa-earth-americas fs-4 text-primary mb-1"></i>
+            <div class="smaller text-muted">{{ "Language"|t }}</div>
+            <div class="fw-bold text-dark">English / ខ្មែរ</div>
+          </div>
+          <div class="col-3">
+            <i class="fa-solid fa-shield-halved fs-4 text-primary mb-1"></i>
+            <div class="smaller text-muted">{% if IS_KHMER %}ការបោះបង់{% else %}Cancellation{% endif %}</div>
+            <div class="fw-bold text-success">{% if IS_KHMER %}ឥតគិតថ្លៃមុន ៧ ថ្ងៃ{% else %}Free up to 7 Days{% endif %}</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Tour Overview -->
+      <div class="bg-white p-4 rounded-4 border shadow-sm mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-circle-info text-primary me-2"></i> {{ "Overview"|t }}</h4>
+        <p class="text-secondary leading-relaxed mb-0" style="font-size: 1.05rem; line-height: 1.8;">
+          {{ package.description|linebreaks }}
+        </p>
+      </div>
+
+      <!-- Day-by-Day Itinerary -->
+      <div class="bg-white p-4 rounded-4 border shadow-sm mb-4">
+        <h4 class="fw-bold mb-3"><i class="fa-solid fa-map-route text-primary me-2"></i> {{ "Itinerary"|t }}</h4>
+        
+        {% if package.itinerary_list %}
+          <div class="accordion" id="itineraryAccordion">
+            {% for item in package.itinerary_list %}
+              <div class="accordion-item border-0 mb-3 shadow-sm rounded-3 overflow-hidden">
+                <h2 class="accordion-header" id="heading{{ forloop.counter }}">
+                  <button class="accordion-button fw-bold {% if not forloop.first %}collapsed{% endif %} bg-light text-dark" type="button" data-bs-toggle="collapse" data-bs-target="#collapse{{ forloop.counter }}" aria-expanded="{% if forloop.first %}true{% else %}false{% endif %}" aria-controls="collapse{{ forloop.counter }}">
+                    <span class="badge bg-primary text-white me-3 px-2 py-1">{{ item.day|t }}</span>
+                    <span>{{ item.desc|truncatewords:8 }}</span>
+                  </button>
+                </h2>
+                <div id="collapse{{ forloop.counter }}" class="accordion-collapse collapse {% if forloop.first %}show{% endif %}" aria-labelledby="heading{{ forloop.counter }}" data-bs-parent="#itineraryAccordion">
+                  <div class="accordion-body bg-white text-secondary">
+                    {{ item.desc }}
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          </div>
+        {% else %}
+          <p class="text-muted">{% if IS_KHMER %}ព័ត៌មានលម្អិតនៃកាលវិភាគនឹងត្រូវបានផ្តល់ជូនពេលបញ្ជាក់ការកក់។{% else %}Itinerary details provided upon booking confirmation.{% endif %}</p>
+        {% endif %}
+      </div>
+
+      <!-- Inclusions & Exclusions -->
+      <div class="bg-white p-4 rounded-4 border shadow-sm mb-4">
+        <h4 class="fw-bold mb-4"><i class="fa-solid fa-list-check text-primary me-2"></i> {{ "What's Included"|t }} & {{ "What's Excluded"|t }}</h4>
+        <div class="row g-4">
+          <!-- Inclusions -->
+          <div class="col-md-6 border-end">
+            <h6 class="fw-bold text-success mb-3"><i class="fa-solid fa-check-circle me-2"></i> {{ "What's Included"|t }}</h6>
+            <ul class="list-unstyled">
+              {% for inc in package.inclusions_list %}
+                <li class="mb-2 d-flex align-items-start gap-2 small text-secondary">
+                  <i class="fa-solid fa-check text-success mt-1"></i>
+                  <span>{{ inc }}</span>
+                </li>
+              {% empty %}
+                <li class="text-muted small">{% if IS_KHMER %}រួមបញ្ចូលការស្នាក់នៅ និងសកម្មភាពស្តង់ដារ។{% else %}Standard accommodation and activities included.{% endif %}</li>
+              {% endfor %}
+            </ul>
+          </div>
+
+          <!-- Exclusions -->
+          <div class="col-md-6">
+            <h6 class="fw-bold text-danger mb-3"><i class="fa-solid fa-times-circle me-2"></i> {{ "What's Excluded"|t }}</h6>
+            <ul class="list-unstyled">
+              {% for exc in package.exclusions_list %}
+                <li class="mb-2 d-flex align-items-start gap-2 small text-secondary">
+                  <i class="fa-solid fa-xmark text-danger mt-1"></i>
+                  <span>{{ exc }}</span>
+                </li>
+              {% empty %}
+                <li class="text-muted small">{% if IS_KHMER %}មិនរួមបញ្ចូលសំបុត្រយន្តហោះអន្តរជាតិ និងការចំណាយផ្ទាល់ខ្លួន។{% else %}International airfare and personal expenses.{% endif %}</li>
+              {% endfor %}
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <!-- Customer Reviews & Review Form -->
+      <div class="bg-white p-4 rounded-4 border shadow-sm mb-4" id="reviews-section">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+          <h4 class="fw-bold mb-0">
+            <i class="fa-solid fa-comments text-primary me-2"></i> {{ "Customer Reviews"|t }} ({{ package.reviews_count }})
+          </h4>
+          <span class="fs-5 fw-bold text-warning"><i class="fa-solid fa-star"></i> {{ package.average_rating }} / 5.0</span>
+        </div>
+
+        <!-- Submit Review (if logged in) -->
+        {% if user.is_authenticated %}
+          <div class="p-3 bg-light rounded-3 mb-4 border">
+            <h6 class="fw-bold mb-2">{{ "Write a Review"|t }}</h6>
+            <form action="{% url 'add_review' package.id %}" method="POST">
+              {% csrf_token %}
+              <div class="row g-2">
+                <div class="col-md-3">
+                  <label class="small text-muted mb-1">{{ "Your Rating"|t }}</label>
+                  {{ review_form.rating }}
+                </div>
+                <div class="col-md-9">
+                  <label class="small text-muted mb-1">{{ "Your Comment"|t }}</label>
+                  {{ review_form.comment }}
+                </div>
+              </div>
+              <button type="submit" class="btn btn-sm btn-primary-custom mt-2 px-3">{{ "Submit Review"|t }}</button>
+            </form>
+          </div>
+        {% else %}
+          <div class="alert alert-light border small mb-4">
+            <i class="fa-solid fa-lock text-muted me-1"></i>
+            <a href="{% url 'login' %}?next={{ request.path }}" class="fw-bold text-primary">{{ "Sign In"|t }}</a> {% if IS_KHMER %}ដើម្បីចែករំលែកការវាយតម្លៃរបស់អ្នក។{% else %}to share your review for this tour.{% endif %}
+          </div>
+        {% endif %}
+
+        <!-- Reviews List -->
+        <div class="vstack gap-3">
+          {% for r in reviews %}
+            <div class="p-3 rounded-3 bg-light border">
+              <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex align-items-center gap-2">
+                  <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center fw-bold" style="width: 34px; height: 34px; font-size: 0.85rem;">
+                    {{ r.user.first_name|default:r.user.username|make_list|first|upper }}
+                  </div>
+                  <div>
+                    <span class="fw-bold text-dark small">{{ r.user.first_name }} {{ r.user.last_name|default:r.user.username }}</span>
+                    <span class="text-muted smaller ms-2">{{ r.created_at|date:"M d, Y" }}</span>
+                  </div>
+                </div>
+                <div class="text-warning small">
+                  {% for i in "12345" %}
+                    {% if forloop.counter <= r.rating %}
+                      <i class="fa-solid fa-star"></i>
+                    {% else %}
+                      <i class="fa-regular fa-star"></i>
+                    {% endif %}
+                  {% endfor %}
+                </div>
+              </div>
+              <p class="small text-secondary mb-0">"{{ r.comment }}"</p>
+            </div>
+          {% empty %}
+            <p class="text-muted small">{% if IS_KHMER %}មិនទាន់មានមតិវាយតម្លៃសម្រាប់កញ្ចប់នេះនៅឡើយទេ។{% else %}No reviews yet for this package. Be the first to review!{% endif %}</p>
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+
+    <!-- RIGHT COLUMN: STICKY BOOKING WIDGET -->
+    <div class="col-lg-4">
+      <div class="bg-white p-4 rounded-4 border shadow-sm sticky-top" style="top: 90px; z-index: 10;">
+        <div class="d-flex justify-content-between align-items-baseline mb-3 pb-3 border-bottom">
+          <div>
+            <span class="text-muted small">{{ "Per Person"|t }}</span>
+            <div class="d-flex align-items-baseline gap-2">
+              <span class="price-tag fs-2" id="unit_price_val" data-price="{{ package.current_price }}">${{ package.current_price }}</span>
+              <span class="text-muted small">/ {{ "Person"|t }}</span>
+            </div>
+          </div>
+          {% if package.discount_price and package.discount_price < package.price %}
+            <span class="badge bg-danger rounded-pill px-2 py-1">Save ${{ package.price|floatformat:0 }}</span>
+          {% endif %}
+        </div>
+
+        <!-- Dynamic Calculator Summary -->
+        <div class="mb-4">
+          <label class="form-label small fw-bold text-uppercase text-muted">{{ "Number of Travelers"|t }}</label>
+          <div class="input-group mb-2">
+            <button class="btn btn-outline-secondary" type="button" id="btn_guests_minus"><i class="fa-solid fa-minus"></i></button>
+            <input type="number" id="travelers_count_input" class="form-control text-center fw-bold" value="1" min="1" max="{{ package.max_travelers }}">
+            <button class="btn btn-outline-secondary" type="button" id="btn_guests_plus"><i class="fa-solid fa-plus"></i></button>
+          </div>
+
+          <div class="p-3 bg-light rounded-3 border my-3">
+            <div class="d-flex justify-content-between small text-muted mb-1">
+              <span>{{ "Subtotal"|t }}:</span>
+              <span id="calculated_subtotal" class="fw-bold text-dark">${{ package.current_price }}</span>
+            </div>
+            <div class="d-flex justify-content-between small text-muted mb-1">
+              <span>{% if IS_KHMER %}ពន្ធ និងសេវា{% else %}Taxes & Fees{% endif %}:</span>
+              <span class="text-success fw-semibold">{% if IS_KHMER %}បានរួមបញ្ចូល{% else %}Included{% endif %}</span>
+            </div>
+            <hr class="my-2">
+            <div class="d-flex justify-content-between fw-bold text-dark fs-5">
+              <span>{{ "Total Price"|t }}:</span>
+              <span id="calculated_total_price" class="text-primary">${{ package.current_price }}</span>
+            </div>
+          </div>
+
+          <!-- Book Now CTA -->
+          <a href="{% url 'book_package' package.slug %}" class="btn btn-primary-custom btn-lg w-100 rounded-pill py-3 fw-bold shadow-sm d-flex align-items-center justify-content-center gap-2">
+            <i class="fa-solid fa-calendar-check"></i> {{ "Book This Tour"|t }}
+          </a>
+        </div>
+
+        <!-- Trust Badges -->
+        <div class="vstack gap-2 pt-2 border-top small text-muted">
+          <div><i class="fa-solid fa-check text-success me-2"></i> {{ "Seamless Online Booking"|t }}</div>
+          <div><i class="fa-solid fa-check text-success me-2"></i> {{ "Best Price Guarantee"|t }}</div>
+          <div><i class="fa-solid fa-headset text-primary me-2"></i> {{ "24/7 Concierge Support"|t }}</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

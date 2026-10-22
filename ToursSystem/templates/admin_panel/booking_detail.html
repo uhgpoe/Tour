@@ -1,0 +1,146 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static lang_tags %}
+
+{% block title %}{{ "Booking Details"|t }} #{{ booking.booking_number }} | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex align-items-center justify-content-between mb-4">
+  <div class="d-flex align-items-center gap-3">
+    <a href="{% url 'admin_bookings' %}" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;">
+      <i class="fa-solid fa-arrow-left"></i>
+    </a>
+    <div>
+      <h3 class="fw-bold text-dark mb-0">{{ "Booking Number"|t }} #{{ booking.booking_number }}</h3>
+      <div class="text-muted small">{% if IS_KHMER %}បានបង្កើតនៅ{% else %}Created on{% endif %} {{ booking.created_at|date:"F d, Y at H:i" }}</div>
+    </div>
+  </div>
+  <a href="{% url 'booking_confirmation' booking.booking_number %}" class="btn btn-sm btn-outline-dark rounded-pill" target="_blank">
+    <i class="fa-solid fa-file-invoice me-1"></i> {{ "Print Voucher"|t }}
+  </a>
+</div>
+
+<div class="row g-4">
+  <!-- LEFT: DETAILS -->
+  <div class="col-lg-8">
+    <div class="bg-white rounded-4 border shadow-sm p-4 mb-4">
+      <h5 class="fw-bold mb-3 border-bottom pb-2">{{ "Tour Package Information"|t }}</h5>
+      <div class="d-flex gap-3 mb-3">
+        <img src="{{ booking.package.display_image }}" alt="{{ booking.package.title }}" class="rounded-3" style="width: 100px; height: 80px; object-fit: cover;">
+        <div>
+          <span class="badge bg-light text-primary border mb-1">{{ booking.package.get_category_display|t }}</span>
+          <h5 class="fw-bold mb-1">{{ booking.package.title }}</h5>
+          <div class="small text-muted">
+            <i class="fa-solid fa-location-dot text-danger me-1"></i> {{ booking.package.destination.name }}, {{ booking.package.destination.country }}
+          </div>
+        </div>
+      </div>
+      <div class="row g-3 small text-secondary">
+        <div class="col-sm-4">
+          <strong>{{ "Duration"|t }}:</strong> {{ booking.package.duration_days }} {{ "Days"|t }} / {{ booking.package.duration_nights }} {{ "Nights"|t }}
+        </div>
+        <div class="col-sm-4">
+          <strong>{{ "Travel Date"|t }}:</strong> {{ booking.travel_date|date:"F d, Y" }}
+        </div>
+        <div class="col-sm-4">
+          <strong>{{ "Number of Travelers"|t }}:</strong> {{ booking.travelers_count }} {{ "Person"|t }}
+        </div>
+      </div>
+    </div>
+
+    <!-- Customer Information -->
+    <div class="bg-white rounded-4 border shadow-sm p-4 mb-4">
+      <h5 class="fw-bold mb-3 border-bottom pb-2">{{ "Contact Information"|t }}</h5>
+      <div class="row g-3 small">
+        <div class="col-md-6">
+          <span class="text-muted">{{ "Full Name"|t }}:</span>
+          <div class="fw-bold fs-6 text-dark">{{ booking.contact_name }}</div>
+        </div>
+        <div class="col-md-6">
+          <span class="text-muted">{{ "Customer"|t }}:</span>
+          <div class="fw-bold text-dark">{{ booking.user.username }}</div>
+        </div>
+        <div class="col-md-6">
+          <span class="text-muted">{{ "Email Address"|t }}:</span>
+          <div class="fw-bold text-dark">{{ booking.contact_email }}</div>
+        </div>
+        <div class="col-md-6">
+          <span class="text-muted">{{ "Phone Number"|t }}:</span>
+          <div class="fw-bold text-dark">{{ booking.contact_phone }}</div>
+        </div>
+        {% if booking.special_requests %}
+          <div class="col-12">
+            <span class="text-muted">{{ "Special Requests or Notes"|t }}:</span>
+            <div class="p-3 bg-light rounded-3 border text-dark mt-1">{{ booking.special_requests }}</div>
+          </div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- Payment Information -->
+    <div class="bg-white rounded-4 border shadow-sm p-4">
+      <h5 class="fw-bold mb-3 border-bottom pb-2">{{ "Payment Status"|t }}</h5>
+      {% if booking.payment %}
+        <div class="row g-3 small">
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Transaction ID"|t }}:</span>
+            <div class="fw-bold font-monospace text-primary">{{ booking.payment.transaction_id }}</div>
+          </div>
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Payment Method"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.payment.get_payment_method_display|t }}</div>
+          </div>
+          <div class="col-md-4">
+            <span class="text-muted">{{ "Total Amount"|t }}:</span>
+            <div class="fw-bold text-success fs-6">${{ booking.payment.amount }}</div>
+          </div>
+          <div class="col-md-6">
+            <span class="text-muted">{{ "Date"|t }}:</span>
+            <div class="fw-bold text-dark">{{ booking.payment.payment_date|date:"F d, Y H:i" }}</div>
+          </div>
+          <div class="col-md-6">
+            <span class="text-muted">{{ "Status"|t }}:</span>
+            <div><span class="badge bg-success rounded-pill px-3">{{ booking.payment.status|t }}</span></div>
+          </div>
+        </div>
+      {% else %}
+        <div class="alert alert-warning mb-0 small">
+          <i class="fa-solid fa-triangle-exclamation me-1"></i> {% if IS_KHMER %}មិនទាន់មានប្រតិបត្តិការទូទាត់ប្រាក់នៅឡើយទេ។ ស្ថានភាពគឺកំពុងរង់ចាំ។{% else %}No payment transaction recorded yet for this booking. Status is Pending.{% endif %}
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- RIGHT: UPDATE STATUS FORM -->
+  <div class="col-lg-4">
+    <div class="bg-white rounded-4 border shadow-sm p-4 sticky-top" style="top: 20px;">
+      <h5 class="fw-bold mb-3 border-bottom pb-2">{{ "Status"|t }}</h5>
+
+      <form method="POST">
+        {% csrf_token %}
+        <div class="mb-3">
+          <label class="form-label small fw-bold text-muted">{{ "Status"|t }}</label>
+          <select name="status" class="form-select form-select-lg">
+            <option value="Pending" {% if booking.status == 'Pending' %}selected{% endif %}>{{ "Pending"|t }}</option>
+            <option value="Confirmed" {% if booking.status == 'Confirmed' %}selected{% endif %}>{{ "Confirmed"|t }}</option>
+            <option value="Completed" {% if booking.status == 'Completed' %}selected{% endif %}>{{ "Completed"|t }}</option>
+            <option value="Cancelled" {% if booking.status == 'Cancelled' %}selected{% endif %}>{{ "Cancelled"|t }}</option>
+          </select>
+        </div>
+
+        <button type="submit" class="btn btn-primary-custom w-100 rounded-pill py-2 fw-bold">
+          <i class="fa-solid fa-check-double me-1"></i> {{ "Save Changes"|t }}
+        </button>
+      </form>
+
+      <hr class="my-4">
+
+      <div class="vstack gap-2 small text-muted">
+        <div><strong>{{ "Pending"|t }}:</strong> {% if IS_KHMER %}បានបង្កើតការកក់ រង់ចាំការទូទាត់ ឬការផ្ទៀងផ្ទាត់។{% else %}Booking created, awaiting payment or verification.{% endif %}</div>
+        <div><strong>{{ "Confirmed"|t }}:</strong> {% if IS_KHMER %}បានទទួលការទូទាត់ ការកក់ត្រូវបានធានា។{% else %}Payment received, booking guaranteed.{% endif %}</div>
+        <div><strong>{{ "Completed"|t }}:</strong> {% if IS_KHMER %}ដំណើរកម្សាន្តបានបញ្ចប់ដោយជោគជ័យ។{% else %}Tour journey successfully finished.{% endif %}</div>
+        <div><strong>{{ "Cancelled"|t }}:</strong> {% if IS_KHMER %}ការកក់ត្រូវបានលុបចោល។{% else %}Reservation revoked by traveler or admin.{% endif %}</div>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

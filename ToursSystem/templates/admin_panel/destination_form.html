@@ -1,0 +1,83 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block title %}{{ title }} | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="{% url 'admin_destinations' %}" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+  <div>
+    <h3 class="fw-bold text-dark mb-0">{{ title }}</h3>
+    <div class="text-muted small">Fill in the destination details, geography, and imagery.</div>
+  </div>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4 p-md-5">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Destination Name *</label>
+        {{ form.name }}
+        {% if form.name.errors %}<div class="text-danger small">{{ form.name.errors }}</div>{% endif %}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">Country *</label>
+        {{ form.country }}
+        {% if form.country.errors %}<div class="text-danger small">{{ form.country.errors }}</div>{% endif %}
+      </div>
+      <div class="col-md-3">
+        <label class="form-label small fw-bold text-muted">City / Region *</label>
+        {{ form.city }}
+        {% if form.city.errors %}<div class="text-danger small">{{ form.city.errors }}</div>{% endif %}
+      </div>
+
+      <div class="col-12">
+        <label class="form-label small fw-bold text-muted">Description *</label>
+        {{ form.description }}
+        {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors }}</div>{% endif %}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Web Image URL (Unsplash or external link)</label>
+        {{ form.image_url }}
+        <div class="form-text small">e.g. https://images.unsplash.com/photo-1537996194471-e657df975ab4</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Or Upload Image File</label>
+        {{ form.image }}
+      </div>
+
+      <div class="col-md-5">
+        <label class="form-label small fw-bold text-muted">Best Season to Visit</label>
+        {{ form.best_time_to_visit }}
+      </div>
+
+      <div class="col-md-5">
+        <label class="form-label small fw-bold text-muted">Climate</label>
+        {{ form.climate }}
+      </div>
+
+      <div class="col-md-2 d-flex align-items-center pt-4">
+        <div class="form-check form-switch">
+          {{ form.is_featured }}
+          <label class="form-check-label small fw-bold text-dark" for="{{ form.is_featured.id_for_label }}">
+            Featured on Home
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between pt-3 border-top">
+      <a href="{% url 'admin_destinations' %}" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+      <button type="submit" class="btn btn-primary-custom rounded-pill px-5 fw-bold">
+        <i class="fa-solid fa-save me-1"></i> Save Destination
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}

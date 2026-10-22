@@ -1,0 +1,121 @@
+{% extends 'admin_panel/base_admin.html' %}
+{% load static %}
+
+{% block title %}{{ title }} | Wanderlust Admin{% endblock %}
+
+{% block admin_content %}
+<div class="d-flex align-items-center gap-3 mb-4">
+  <a href="{% url 'admin_packages' %}" class="btn btn-sm btn-outline-secondary rounded-circle" style="width: 36px; height: 36px; display: inline-flex; align-items: center; justify-content: center;">
+    <i class="fa-solid fa-arrow-left"></i>
+  </a>
+  <div>
+    <h3 class="fw-bold text-dark mb-0">{{ title }}</h3>
+    <div class="text-muted small">Configure tour package details, pricing, duration, day-by-day plan, and inclusions.</div>
+  </div>
+</div>
+
+<div class="bg-white rounded-4 border shadow-sm p-4 p-md-5">
+  <form method="POST" enctype="multipart/form-data">
+    {% csrf_token %}
+
+    <div class="row g-3 mb-4">
+      <div class="col-md-8">
+        <label class="form-label small fw-bold text-muted">Package Title *</label>
+        {{ form.title }}
+        {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors }}</div>{% endif %}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Destination *</label>
+        {{ form.destination }}
+        {% if form.destination.errors %}<div class="text-danger small">{{ form.destination.errors }}</div>{% endif %}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Category *</label>
+        {{ form.category }}
+      </div>
+
+      <div class="col-md-2 col-6">
+        <label class="form-label small fw-bold text-muted">Duration Days *</label>
+        {{ form.duration_days }}
+      </div>
+
+      <div class="col-md-2 col-6">
+        <label class="form-label small fw-bold text-muted">Duration Nights *</label>
+        {{ form.duration_nights }}
+      </div>
+
+      <div class="col-md-2 col-6">
+        <label class="form-label small fw-bold text-muted">Price ($ USD) *</label>
+        {{ form.price }}
+      </div>
+
+      <div class="col-md-2 col-6">
+        <label class="form-label small fw-bold text-muted">Discount Price ($)</label>
+        {{ form.discount_price }}
+      </div>
+
+      <div class="col-12">
+        <label class="form-label small fw-bold text-muted">Tour Description *</label>
+        {{ form.description }}
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Featured Image URL (Web Unsplash)</label>
+        {{ form.image_url }}
+      </div>
+
+      <div class="col-md-4">
+        <label class="form-label small fw-bold text-muted">Or Upload Image File</label>
+        {{ form.featured_image }}
+      </div>
+
+      <div class="col-md-2">
+        <label class="form-label small fw-bold text-muted">Max Group Size</label>
+        {{ form.max_travelers }}
+      </div>
+
+      <div class="col-12">
+        <label class="form-label small fw-bold text-muted">Day-by-Day Itinerary</label>
+        {{ form.itinerary }}
+        <div class="form-text small">Format each line as: "Day 1: Title - Details"</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Inclusions</label>
+        {{ form.inclusions }}
+        <div class="form-text small">Comma or newline separated list of included amenities.</div>
+      </div>
+
+      <div class="col-md-6">
+        <label class="form-label small fw-bold text-muted">Exclusions</label>
+        {{ form.exclusions }}
+        <div class="form-text small">Comma or newline separated list of excluded items.</div>
+      </div>
+
+      <div class="col-md-6 d-flex align-items-center gap-4 pt-3">
+        <div class="form-check form-switch">
+          {{ form.is_featured }}
+          <label class="form-check-label small fw-bold text-dark" for="{{ form.is_featured.id_for_label }}">
+            Featured Package
+          </label>
+        </div>
+        <div class="form-check form-switch">
+          {{ form.is_active }}
+          <label class="form-check-label small fw-bold text-dark" for="{{ form.is_active.id_for_label }}">
+            Active for Booking
+          </label>
+        </div>
+      </div>
+    </div>
+
+    <div class="d-flex justify-content-between pt-3 border-top">
+      <a href="{% url 'admin_packages' %}" class="btn btn-outline-secondary rounded-pill px-4">Cancel</a>
+      <button type="submit" class="btn btn-primary-custom rounded-pill px-5 fw-bold">
+        <i class="fa-solid fa-save me-1"></i> Save Tour Package
+      </button>
+    </div>
+  </form>
+</div>
+{% endblock %}
